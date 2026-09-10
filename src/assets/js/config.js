@@ -1,5 +1,6 @@
 export const LIST_PAGE = 3;
 export const AUTOPLAY_MS = 6500;
+export const SITE_ORIGIN = "https://cbcnotebooks.co.ke";
 
 export const RESOURCE_LABEL = {
   notes: "Notes",

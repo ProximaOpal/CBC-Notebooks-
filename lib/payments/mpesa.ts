@@ -4,6 +4,7 @@
  */
 
 import { rememberStkIntent, scheduleStkQueryFallback } from "./mpesa-resilience";
+import { publicAbsoluteUrl } from "@/lib/site";
 
 export type DarajaToken = { access_token: string; expires_in: number };
 export type StkPushResult = {
@@ -33,10 +34,9 @@ function passkey() {
 }
 
 function callbackUrl() {
-  return (
-    process.env.MPESA_CALLBACK_URL ||
-    process.env.MPESA_STK_CALLBACK_URL ||
-    "http://localhost:3000/api/payments/mpesa/callback"
+  return publicAbsoluteUrl(
+    process.env.MPESA_CALLBACK_URL || process.env.MPESA_STK_CALLBACK_URL,
+    "/api/payments/mpesa/callback"
   );
 }
 

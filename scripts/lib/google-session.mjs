@@ -330,14 +330,20 @@ export function clearSessionCookie(secure) {
 
 export function isAllowedOrigin(origin, host) {
   if (!origin) return true;
+  const production = "https://cbcnotebooks.co.ke";
   const allowed = [
     process.env.AUTH_URL,
     process.env.GOOGLE_CALLBACK_URL,
+    process.env.NEXT_PUBLIC_SITE_URL,
+    production,
     host ? `http://${host}` : "",
     host ? `https://${host}` : "",
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-    "http://localhost:3000",
-  ].filter(Boolean);
-  return allowed.some((item) => origin === item || origin.startsWith(item.replace(/\/$/, "")));
+  ];
+  if (process.env.NODE_ENV !== "production") {
+    allowed.push("http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:3000");
+  }
+  return allowed
+    .filter(Boolean)
+    .filter((item) => process.env.NODE_ENV !== "production" || !/localhost|127\.0\.0\.1/.test(item))
+    .some((item) => origin === item || origin.startsWith(String(item).replace(/\/$/, "")));
 }

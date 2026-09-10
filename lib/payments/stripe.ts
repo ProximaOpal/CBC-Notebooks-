@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { publicSiteOrigin } from "@/lib/site";
 
 let stripeClient: Stripe | null = null;
 
@@ -19,10 +20,7 @@ export async function createStripeSession(
   const stripe = getStripe();
   const unitAmount = Math.round(Number(amount) * (currency.toUpperCase() === "KES" ? 100 : 100));
   if (!Number.isFinite(unitAmount) || unitAmount < 1) throw new Error("Invalid Stripe amount");
-  const origin =
-    process.env.AUTH_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000";
+  const origin = publicSiteOrigin();
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     success_url: `${origin}/?payment=success&ref=${encodeURIComponent(referenceId)}`,

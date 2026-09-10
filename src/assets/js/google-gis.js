@@ -29,6 +29,10 @@ export async function initGoogleGis(handlers = {}) {
     const cfg = await fetch("/api/auth/google", { credentials: "include" }).then((res) => res.json());
     const clientId = cfg.client_id;
     if (!clientId) return { configured: false };
+    const onLiveHost = !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+    if (onLiveHost && cfg.callback_url && /localhost|127\.0\.0\.1/.test(String(cfg.callback_url))) {
+      cfg.callback_url = `${window.location.origin}/api/auth/google/callback`;
+    }
     await waitForGsi();
     window.google.accounts.id.initialize({
       client_id: clientId,

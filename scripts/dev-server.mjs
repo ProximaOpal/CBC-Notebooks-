@@ -331,9 +331,17 @@ function requireUser(req, res) {
 }
 
 async function handleGoogleConfig(_req, res) {
+  const configured = String(process.env.GOOGLE_CALLBACK_URL || "").trim();
+  const live = process.env.NODE_ENV === "production";
+  const callback =
+    configured && !(live && /localhost|127\.0\.0\.1/.test(configured))
+      ? configured
+      : live
+        ? "https://cbcnotebooks.co.ke/api/auth/google/callback"
+        : "/api/auth/google/callback";
   sendJson(res, 200, {
     client_id: googleClientId(),
-    callback_url: process.env.GOOGLE_CALLBACK_URL || "/api/auth/google/callback",
+    callback_url: callback,
     scopes: ["openid", "email", "profile"],
   });
 }

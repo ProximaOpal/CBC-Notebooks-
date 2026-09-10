@@ -1,4 +1,4 @@
-const CACHE = "cbc-notebooks-v9";
+const CACHE = "cbc-notebooks-v10";
 const PRECACHE = [
   "./",
   "./index.html",
