@@ -1,6 +1,8 @@
 # CBC Notebooks
 
-Static CBC learning site for Kenya Grades 4–9. Source lives in `src/`. Render publishes `dist/`.
+Static CBC learning site for Kenya Grades 4–10. Source lives in `src/`. Render publishes `dist/`.
+
+Repo: [ProximaOpal/CBC-Notebooks-](https://github.com/ProximaOpal/CBC-Notebooks-)
 
 ## Tree
 
@@ -33,6 +35,7 @@ Static CBC learning site for Kenya Grades 4–9. Source lives in `src/`. Render 
 npm run dev      # http://localhost:8080 from src/
 npm run build    # write dist/
 npm start        # http://localhost:8080 from dist/
+npm test         # vitest
 ```
 
 ## Render
