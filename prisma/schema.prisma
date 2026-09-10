@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  googleId      String?   @unique
+  givenName     String?
+  familyName    String?
+  locale        String?
+  authProvider  String?
+  lastLoginAt   DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  privacyRequests PrivacyRequest[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model MpesaIntent {
+  id                 String   @id @default(cuid())
+  checkoutRequestId  String   @unique
+  merchantRequestId  String?
+  amount             Int
+  accountReference   String
+  msisdnMasked       String
+  status             String
+  resultCode         String?
+  resultDesc         String?
+  receipt            String?  @unique
+  queryAfter         DateTime
+  queriedAt          DateTime?
+  callbackAt         DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model C2bPayment {
+  id              String   @id @default(cuid())
+  transId         String   @unique
+  amount          String
+  billRefNumber   String
+  businessShortCode String?
+  msisdnMasked    String?
+  createdAt       DateTime @default(now())
+}
+
+model PrivacyRequest {
+  id          String   @id @default(cuid())
+  type        String
+  subjectHash String
+  status      String
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  fulfilledAt DateTime?
+}
+
+model Transaction {
+  id                  String   @id @default(uuid())
+  userId              String?
+  referenceId         String   @unique
+  provider            String
+  providerReference   String?
+  mpesaReceiptNumber  String?
+  amount              Decimal  @db.Decimal(12, 2)
+  currency            String
+  status              String
+  metadata            Json?
+  failureReason       String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([providerReference])
+  @@index([userId, createdAt])
+}
+
+model Entitlement {
+  id         String   @id @default(cuid())
+  userId     String
+  item       String
+  releasedAt DateTime @default(now())
+
+  @@unique([userId, item])
+  @@index([userId])
+}

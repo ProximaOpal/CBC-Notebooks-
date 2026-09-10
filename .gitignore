@@ -1,0 +1,14 @@
+dist/
+node_modules/
+.data/
+.next/
+.env
+.env.local
+.env*.local
+.DS_Store
+Thumbs.db
+*.log
+files.zip
+Thumbs.db
+*.log
+files.zip

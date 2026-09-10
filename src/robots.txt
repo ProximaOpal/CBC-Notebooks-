@@ -1,0 +1,216 @@
+# CBC Notebooks — crawler policy
+# Public CBC learning resources for Kenya Grades 4–10 may be indexed.
+# Update the host in Sitemap lines if the production domain changes.
+
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
+Allow: /sitemap-notes.xml
+Allow: /sitemap-exams.xml
+Allow: /sitemap-videos.xml
+Allow: /sitemap-labs.xml
+Allow: /sitemap-gallery.xml
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /labs/3d/
+Allow: /notes/grade-10/
+Allow: /exams/grade-10/
+Allow: /videos/grade-10/
+Allow: /gallery/
+Allow: /img/
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+Disallow: /login/
+Disallow: /account/
+Disallow: /cart/
+Disallow: /*?*session=
+Disallow: /*?*token=
+Disallow: /*?*auth=
+Disallow: /*?*key=
+
+User-agent: Googlebot
+Allow: /
+Allow: /llms.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: Googlebot-Image
+Allow: /img/
+Allow: /assets/img/
+Allow: /gallery/
+Allow: /labs/
+
+User-agent: Bingbot
+Allow: /
+Allow: /llms.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: Anthropic-AI
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: Bytespider
+Allow: /
+Allow: /llms.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /labs/3d/
+Allow: /gallery/
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: ByteSpider
+Allow: /
+Allow: /llms.txt
+Allow: /notes/
+Allow: /exams/
+Allow: /videos/
+Allow: /labs/
+Allow: /labs/3d/
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: Google-CloudVertexBot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: CCBot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+Disallow: /user/dashboard/
+Disallow: /checkout/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: cohere-ai
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+User-agent: meta-externalagent
+Allow: /
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/internal/
+
+Sitemap: https://cbcnotebooks.co.ke/sitemap.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-notes.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-exams.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-videos.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-labs.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-gallery.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-kssea.xml
+Sitemap: https://cbcnotebooks.co.ke/sitemap-grade-10.xml

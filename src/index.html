@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#031211" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="CBC Notebooks" />
+<title>CBC Notebooks — Learning, Kenya</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/icons/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://cbcnotebooks.co.ke/#org",
+      "name": "CBC Notebooks",
+      "url": "https://cbcnotebooks.co.ke",
+      "logo": "https://cbcnotebooks.co.ke/assets/img/icons/icon-512.png",
+      "areaServed": "KE"
+    },
+    {
+      "@type": "Course",
+      "name": "Grade 4 CBC subject pathway",
+      "url": "https://cbcnotebooks.co.ke/notes/grade-4/",
+      "provider": { "@type": "Organization", "name": "CBC Notebooks" },
+      "educationalLevel": "Grade 4",
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "Course",
+      "name": "Grade 10 CBC Senior School pathway",
+      "url": "https://cbcnotebooks.co.ke/notes/grade-10/",
+      "provider": { "@type": "Organization", "name": "CBC Notebooks" },
+      "educationalLevel": "Grade 10",
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "LearningResource",
+      "name": "Grade 6 Mathematics CBC notes",
+      "url": "https://cbcnotebooks.co.ke/notes/grade-6/mathematics/",
+      "learningResourceType": "notes",
+      "encodingFormat": "application/pdf",
+      "educationalLevel": "Grade 6",
+      "inLanguage": ["en", "sw"],
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "LearningResource",
+      "name": "Grade 9 Integrated Science exam paper",
+      "url": "https://cbcnotebooks.co.ke/exams/grade-9/term-2/",
+      "learningResourceType": "exam paper",
+      "encodingFormat": "application/pdf",
+      "educationalLevel": "Grade 9",
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Grade 7 Integrated Science circuit experiment",
+      "url": "https://cbcnotebooks.co.ke/videos/grade-7/integrated-science/circuits/",
+      "description": "Practical science video for simple circuits in the CBC Junior Secondary laboratory.",
+      "thumbnailUrl": "https://cbcnotebooks.co.ke/assets/img/icons/icon-512.png",
+      "isFamilyFriendly": true
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Grade 8 Pre-Technical workshop tools",
+      "url": "https://cbcnotebooks.co.ke/videos/grade-8/pre-technical-studies/workshop-tools/",
+      "description": "Pre-technical studies video covering workshop tools, safety and simple machines.",
+      "thumbnailUrl": "https://cbcnotebooks.co.ke/assets/img/icons/icon-512.png",
+      "isFamilyFriendly": true
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="hero" id="hero">
+  <div class="hero__frame">
+
+    <div class="hero__viewport">
+      <div class="hero__strip" id="heroStrip">
+        <div class="hero__slide" id="slideA" style="background-image:url('assets/img/sub-math.png');"></div>
+        <div class="hero__slide" id="slideB"></div>
+      </div>
+    </div>
+    <div class="hero__scrim"></div>
+
+    <nav class="nav">
+      <div class="nav__brand">
+        <span class="nav__mark">CBC</span>
+        <span class="nav__brandtext">CBC Notebooks</span>
+      </div>
+      <form class="ask" id="askForm" role="search">
+        <input id="askInput" type="search" name="q" placeholder="Ask AI" autocomplete="off" />
+        <button class="ask__ai" type="submit" aria-label="Ask AI">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3l1.35 6.15L20 12l-6.65 2.85L12 21l-1.35-6.15L4 12l6.65-2.85z"/>
+            <path d="M19 4.2l.45 2.05L21.5 6.7l-2.05.45L19 9.2l-.45-2.05L16.5 6.7l2.05-.45z"/>
+          </svg>
+        </button>
+      </form>
+      <ul class="nav__links">
+        <li><a href="#hero" class="is-active">Home</a></li>
+        <li><a href="#install" data-install>Download app</a></li>
+        <li class="nav__guest">
+          <button type="button" data-auth-open="signin" aria-haspopup="dialog" aria-expanded="false">Sign in</button>
+        </li>
+        <li class="nav__guest">
+          <button type="button" class="nav__register" data-auth-open="signup" aria-haspopup="dialog" aria-expanded="false">Register</button>
+        </li>
+        <li class="nav__authed" hidden>
+          <button type="button" class="nav__account" id="navAccountBtn" data-auth-open="account" aria-haspopup="dialog" aria-expanded="false">
+            <span class="nav__avatar" id="navAvatar">A</span>
+            <span id="navAccountName">Account</span>
+          </button>
+        </li>
+      </ul>
+      <button class="nav__burger" id="burgerBtn" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Grade 4 — Grade 9 · CBC Curriculum</p>
+      <h1 class="hero__title">
+        <span class="hero__title-thin">CBC</span>
+        <span class="hero__title-bold">NOTEBOOKS</span>
+      </h1>
+      <p class="hero__copy">
+        One notebook for every subject in Kenya's CBC ecosystem — notes, videos,
+        galleries, experiments and exams for Upper Primary and Junior Secondary.
+      </p>
+    </div>
+
+    <aside class="hero__resources" id="resourceBtns" aria-label="Resources">
+      <button class="res-btn res-btn--solid" data-resource="notes">Notes</button>
+      <button class="res-btn res-btn--outline" data-resource="videos">Videos</button>
+      <button class="res-btn res-btn--solid" data-resource="gallery">Photo Gallery</button>
+      <button class="res-btn res-btn--outline" data-resource="experiments">Experiments</button>
+      <button class="res-btn res-btn--solid" data-resource="audiobooks">AudioBooks</button>
+      <button class="res-btn res-btn--outline" data-resource="immersive">Immersive Learning</button>
+      <button class="res-btn res-btn--solid" data-resource="exams">Exams</button>
+    </aside>
+
+    <div class="hero__footer">
+      <div class="hero__social">
+        <div class="foot-grid">
+          <button class="foot-btn" type="button" data-overlay="overlayAdd">
+            <span>Add Resource</span>
+            <span class="foot-btn__ico" style="--ico:#00E5C8" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <button class="foot-btn" type="button" data-overlay="overlayRequest">
+            <span>Request Resource</span>
+            <span class="foot-btn__ico" style="--ico:#FF4D1A" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16v10H8l-4 3V6z"/></svg>
+            </span>
+          </button>
+          <button class="foot-btn" type="button" data-overlay="overlayPrivacy">
+            <span>Privacy Policy</span>
+            <span class="foot-btn__ico" style="--ico:#FF2BD6" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+          </button>
+          <button class="foot-btn" id="install" type="button" data-install>
+            <span>Install App</span>
+            <span class="install-btn__stores" aria-hidden="true">
+              <svg class="store-ico store-ico--apple" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M16.37 12.86c.03 3.43 3.01 4.57 3.04 4.58-.02.08-.47 1.63-1.56 3.23-.94 1.38-1.91 2.76-3.44 2.79-1.5.03-1.98-.89-3.7-.89-1.73 0-2.26.86-3.69.92-1.48.06-2.61-1.49-3.56-2.86-1.95-2.83-3.44-8-1.44-11.5.99-1.73 2.76-2.83 4.68-2.86 1.46-.03 2.84 1 3.7 1 .85 0 2.45-1.23 4.13-1.05.7.03 2.67.28 3.94 2.13-3.59 1.97-3.01 7.1.9 8.51zM13.5 5.4c.79-.96 1.32-2.29 1.17-3.62-1.13.05-2.5.76-3.31 1.71-.73.85-1.37 2.21-1.2 3.51 1.27.1 2.57-.65 3.34-1.6z"/>
+              </svg>
+              <svg class="store-ico store-ico--play" viewBox="0 0 24 24">
+                <path fill="#EA4335" d="M3.1 2.3c-.3.2-.5.6-.5 1.1v17.2c0 .5.2.9.5 1.1l9.6-9.7L3.1 2.3z"/>
+                <path fill="#FBBC04" d="M16.6 15.8 13.2 12.4 3.1 21.7c.4.3.9.3 1.4.1l12.1-6z"/>
+                <path fill="#4285F4" d="M20.5 10.9c.7.4.7 1.6 0 2.1l-2.6 1.5-3.5-3.5 3.5-3.5 2.6 1.4z"/>
+                <path fill="#34A853" d="M3.1 2.3 12.2 11.5l3.4-3.4L4.5 2.1C4 .9 3.5.9 3.1 2.3z"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+        <div class="hero__social-row">
+          <a href="#" aria-label="Facebook" class="social-sq">f</a>
+          <a href="#" aria-label="X" class="social-sq">x</a>
+          <a href="#" aria-label="Instagram" class="social-sq">ig</a>
+          <div class="hero__track">
+            <span class="hero__track-label">Scroll</span>
+            <span class="hero__track-line"><i id="trackDot"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__dots" id="heroDots"></div>
+    </div>
+
+  </div>
+</header>
+
+<div class="panel" id="panel" hidden>
+  <article class="sheet" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+
+    <section class="sheet__white">
+      <header class="sheet__brand">
+        <span class="sheet__mark" aria-hidden="true"></span>
+        <span class="sheet__brandname">CBC Notebooks.</span>
+      </header>
+
+      <div class="sheet__badge">
+        <span class="hatch hatch--light" aria-hidden="true"></span>
+        <span class="sheet__vlabel" id="panelKicker">Notes</span>
+      </div>
+
+      <div class="sheet__main">
+        <span class="sheet__num" id="panelNum" aria-hidden="true">01</span>
+        <div class="sheet__title-row">
+          <button class="nav-sq" id="titleBack" type="button" hidden aria-label="Back to all subjects">
+            <svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>
+          </button>
+          <h2 class="sheet__title" id="panelTitle">The Subjects.</h2>
+          <button class="nav-sq" id="subjPrev" type="button" aria-label="Previous subject">
+            <svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>
+          </button>
+          <button class="nav-sq" id="subjNext" type="button" aria-label="Next subject">
+            <svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="sheet__search">
+          <input type="search" id="panelSearch" placeholder="Search subjects or topics…" autocomplete="off" />
+        </div>
+        <div class="sheet__listwrap">
+          <div class="sheet__list" id="panelList"></div>
+          <div class="sheet__list-nav">
+            <button class="nav-sq" type="button" id="listUp" aria-label="Previous items">
+              <svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg>
+            </button>
+            <button class="nav-sq" type="button" id="listDown" aria-label="Next items">
+              <svg viewBox="0 0 24 24"><path d="M6 10l6 6 6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet__black">
+      <button class="sheet__menu" id="panelClose" type="button" aria-label="Close">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="sheet__media">
+        <div class="sheet__photo-row">
+          <button class="sheet__side" id="panelLeft" type="button" aria-label="Previous">
+            <svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="sheet__photo" id="panelPhoto" style="background-image:url('assets/img/sub-math.png');">
+            <span class="sheet__photo-mark" aria-hidden="true"></span>
+          </div>
+          <button class="sheet__side sheet__side--right" id="panelRight" type="button" aria-label="Next">
+            <svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="sheet__actions" id="sheetActions">
+          <button class="icon-btn" id="actPreview" type="button" style="--ico:#00E5C8" title="Preview">
+            <span class="icon-btn__mark">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+            <span>Preview</span>
+          </button>
+          <button class="icon-btn" id="actDownload" type="button" style="--ico:#FF4D1A" title="Download">
+            <span class="icon-btn__mark">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+            </span>
+            <span>Download</span>
+          </button>
+          <button class="icon-btn" id="actShare" type="button" style="--ico:#FF2BD6" title="Share">
+            <span class="icon-btn__mark">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/><path d="M8.2 13.1l7.6 4.2M15.8 6.7l-7.6 4.2"/></svg>
+            </span>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="sheet__back" id="panelBack" type="button" hidden>Back</button>
+    </section>
+
+    <nav class="sheet__pager">
+      <button type="button" id="panelPrev" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+      </button>
+      <div class="sheet__dots" id="panelDots"></div>
+      <button type="button" id="panelNext" aria-label="Next">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
+      </button>
+    </nav>
+
+  </article>
+</div>
+
+<script type="module" src="assets/js/main.js"></script>
+
+<div class="overlay" id="overlayAdd" hidden>
+  <article class="overlay__sheet" role="dialog" aria-labelledby="addTitle">
+    <button class="overlay__close" type="button" data-overlay-close aria-label="Close"></button>
+    <header class="overlay__head">
+      <span class="overlay__ico" style="--ico:#00E5C8" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      <div>
+        <p class="overlay__kicker">Contribute</p>
+        <h2 id="addTitle">Add Resource</h2>
+      </div>
+    </header>
+    <p class="overlay__lead">Share notes, videos, papers or lab work with CBC Notebooks. Approved items appear under the matching subject.</p>
+    <form class="overlay__form" id="formAdd">
+      <label>Your name<input name="name" type="text" required autocomplete="name" /></label>
+      <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+      <label>Resource type
+        <select name="type" required>
+          <option value="">Choose type</option>
+          <option>Notes</option>
+          <option>Videos</option>
+          <option>Photo Gallery</option>
+          <option>Experiments</option>
+          <option>AudioBooks</option>
+          <option>Immersive Learning</option>
+          <option>Exams</option>
+        </select>
+      </label>
+      <label>Subject<input name="subject" type="text" required placeholder="e.g. Mathematics" /></label>
+      <label>Grade
+        <select name="grade" required>
+          <option value="">Choose grade</option>
+          <option>Grade 4</option>
+          <option>Grade 5</option>
+          <option>Grade 6</option>
+          <option>Grade 7</option>
+          <option>Grade 8</option>
+          <option>Grade 9</option>
+        </select>
+      </label>
+      <label>Title<input name="title" type="text" required /></label>
+      <label>Link or description<textarea name="detail" rows="4" required placeholder="Drive link, YouTube URL, or a short description"></textarea></label>
+      <button class="overlay__submit" type="submit">Submit resource</button>
+      <p class="overlay__done" hidden>Thank you. We will review your resource and publish it if it matches the CBC strands.</p>
+    </form>
+  </article>
+</div>
+
+<div class="overlay" id="overlayRequest" hidden>
+  <article class="overlay__sheet" role="dialog" aria-labelledby="requestTitle">
+    <button class="overlay__close" type="button" data-overlay-close aria-label="Close"></button>
+    <header class="overlay__head">
+      <span class="overlay__ico" style="--ico:#FF4D1A" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v10H8l-4 3V6z"/></svg>
+      </span>
+      <div>
+        <p class="overlay__kicker">Ask the library</p>
+        <h2 id="requestTitle">Request Resource</h2>
+      </div>
+    </header>
+    <p class="overlay__lead">Tell us the notes, paper or experiment you need. We use requests to decide what to add next.</p>
+    <form class="overlay__form" id="formRequest">
+      <label>Your name<input name="name" type="text" required autocomplete="name" /></label>
+      <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+      <label>I am a
+        <select name="role" required>
+          <option value="">Choose</option>
+          <option>Learner</option>
+          <option>Parent</option>
+          <option>Teacher</option>
+          <option>Tutor</option>
+        </select>
+      </label>
+      <label>Grade
+        <select name="grade" required>
+          <option value="">Choose grade</option>
+          <option>Grade 4</option>
+          <option>Grade 5</option>
+          <option>Grade 6</option>
+          <option>Grade 7</option>
+          <option>Grade 8</option>
+          <option>Grade 9</option>
+        </select>
+      </label>
+      <label>Subject<input name="subject" type="text" required placeholder="e.g. Integrated Science" /></label>
+      <label>What do you need?<textarea name="detail" rows="4" required placeholder="Topic, term, or exam year"></textarea></label>
+      <button class="overlay__submit" type="submit">Send request</button>
+      <p class="overlay__done" hidden>Request received. We will email you when that resource is ready.</p>
+    </form>
+  </article>
+</div>
+
+<div class="overlay" id="overlayPrivacy" hidden>
+  <article class="overlay__sheet overlay__sheet--wide" role="dialog" aria-labelledby="privacyTitle">
+    <button class="overlay__close" type="button" data-overlay-close aria-label="Close"></button>
+    <header class="overlay__head">
+      <span class="overlay__ico" style="--ico:#FF2BD6" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      </span>
+      <div>
+        <p class="overlay__kicker">Your data</p>
+        <h2 id="privacyTitle">Privacy Policy</h2>
+      </div>
+    </header>
+    <div class="overlay__policy">
+      <p>CBC Notebooks (“we”) provides CBC learning resources for Kenya Grades 4–9. This policy explains how we handle information when you use the website or installed app.</p>
+      <h3>What we collect</h3>
+      <p>If you add or request a resource, we collect the name, email and details you type in that form. The installed app may store pages and images on your device so they work offline. We do not require an account to browse subjects.</p>
+      <h3>How we use it</h3>
+      <p>Form details are used only to review contributions, fulfil requests, and reply to you. We do not sell learner or parent data. We do not use the forms for advertising.</p>
+      <h3>Children</h3>
+      <p>The service is designed for Grades 4–9 with parents and teachers. Do not submit another child’s personal data beyond what is needed for a resource request.</p>
+      <h3>Kenya law</h3>
+      <p>We aim to handle personal data in line with the Data Protection Act, 2019. You may ask to access, correct or delete information you sent through a form by emailing the address you used in that form.</p>
+      <h3>Access and erasure (ODPC)</h3>
+      <p>Data subjects may request an export or deletion of stored account records. Those requests are handled through /api/privacy/export and /api/privacy/delete after identity verification. Telemetry is stored without names, emails, phone numbers or full IP addresses.</p>
+      <h3>Cookies and install</h3>
+      <p>The Progressive Web App uses a service worker to cache lesson pages on your device. You can remove the app and its cache from your browser or phone settings at any time.</p>
+      <h3>Contact</h3>
+      <p>Questions about this policy: privacy@cbcnotebooks.co.ke</p>
+    </div>
+  </article>
+</div>
+
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-overlay__scene" aria-hidden="true"></div>
+  <div class="auth-overlay__backdrop" data-auth-close-backdrop></div>
+  <article
+    class="auth-card"
+    id="authPanel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="authTitle"
+  >
+    <button class="auth-card__close" type="button" data-auth-close aria-label="Close"></button>
+    <div class="auth-card__art">
+      <img src="assets/img/auth-art.png" alt="" />
+      <p class="auth-card__brand">FREELANCER</p>
+    </div>
+    <div class="auth-card__form">
+      <h2 id="authTitle">Create Account</h2>
+      <p class="auth-card__error" id="authError" role="alert" hidden></p>
+
+      <div id="authGoogleWrap">
+        <div id="googleBtn" class="auth-card__gis"></div>
+        <p class="auth-card__note" id="googleConfigNote" hidden>Add GOOGLE_CLIENT_ID to enable Sign in with Google.</p>
+        <p class="auth-card__or">or</p>
+      </div>
+
+      <section id="authViewSignup">
+        <form class="auth-card__fields" id="formAuthSignup">
+          <input id="authSignupName" name="name" type="text" autocomplete="name" required minlength="2" placeholder="Full Name" />
+          <input name="email" type="email" autocomplete="email" required placeholder="Email Address" />
+          <div class="auth-card__password">
+            <input id="authSignupPassword" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Password" />
+            <button class="auth-card__eye" type="button" data-auth-eye="authSignupPassword" aria-label="Show password">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <button class="auth-card__cta" type="submit" data-auth-submit data-label-idle="Create Account" data-label-busy="Creating…">Create Account</button>
+        </form>
+        <p class="auth-card__switch">Already have an account? <button type="button" data-auth-tab="signin">Log in</button></p>
+      </section>
+
+      <section id="authViewSignin" hidden>
+        <form class="auth-card__fields" id="formAuthSignin">
+          <input id="authSigninEmail" name="email" type="email" autocomplete="email" required placeholder="Email Address" />
+          <div class="auth-card__password">
+            <input id="authSigninPassword" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="Password" />
+            <button class="auth-card__eye" type="button" data-auth-eye="authSigninPassword" aria-label="Show password">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <button class="auth-card__cta" type="submit" data-auth-submit data-label-idle="Log in" data-label-busy="Signing in…">Log in</button>
+        </form>
+        <p class="auth-card__switch">Don't have an account? <button type="button" data-auth-tab="signup">Create Account</button></p>
+      </section>
+
+      <section id="authViewAccount" hidden>
+        <div class="auth-card__profile">
+          <img class="auth-card__photo" id="authAccountPhoto" alt="" hidden />
+          <span class="auth-card__avatar" id="authAccountAvatar">A</span>
+          <p class="auth-card__name" id="authAccountName">Learner</p>
+          <p class="auth-card__email" id="authAccountEmail"></p>
+          <dl class="auth-card__facts">
+            <div><dt>Email</dt><dd id="authAccountVerified">—</dd></div>
+            <div><dt>Locale</dt><dd id="authAccountLocale">—</dd></div>
+            <div><dt>Google ID</dt><dd id="authAccountGoogleId">—</dd></div>
+            <div><dt>Signed in</dt><dd id="authAccountStarted">—</dd></div>
+          </dl>
+        </div>
+        <button class="auth-card__cta" type="button" data-auth-signout data-auth-submit data-label-idle="Sign out" data-label-busy="Signing out…">Sign out</button>
+      </section>
+
+      <nav class="auth-card__social" id="authSocial" aria-label="Social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6L16 12h-3V10c0-.6.4-1 1-1z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.6.8-2.5 1A3.7 3.7 0 0 0 12 8.7c0 .3 0 .6.1.8-3.1-.2-5.8-1.6-7.6-3.9-.3.6-.5 1.2-.5 1.9 0 1.3.7 2.4 1.7 3.1-.6 0-1.2-.2-1.7-.5v.1c0 1.8 1.3 3.3 3 3.6-.3.1-.7.1-1 .1-.2 0-.5 0-.7-.1.5 1.5 1.9 2.6 3.6 2.6A7.5 7.5 0 0 1 2 18.4 10.5 10.5 0 0 0 7.7 20c6.8 0 10.5-5.6 10.5-10.5v-.5c.7-.5 1.4-1.2 1.8-1.9z"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M6.5 9H4v11h2.5V9zM5.2 4C4.4 4 3.8 4.6 3.8 5.4S4.4 6.8 5.2 6.8 6.7 6.2 6.7 5.4 6.1 4 5.2 4zM20 20h-2.5v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20H11V9h2.4v1.5h.1c.3-.6 1.2-1.8 2.8-1.8 3 0 3.6 2 3.6 4.6V20z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
+      </nav>
+    </div>
+  </article>
+</div>
+
+<div class="install-tip" id="installTip" hidden>
+  <div class="install-tip__card" role="dialog" aria-labelledby="installTipTitle">
+    <p class="install-tip__title" id="installTipTitle">Install CBC Notebooks</p>
+    <p class="install-tip__copy" id="installTipCopy">On iPhone or iPad, tap the Share button, then choose Add to Home Screen. The app opens full-screen like Notes, Videos and Exams on this site.</p>
+    <button class="install-tip__ok" id="installTipClose" type="button">OK</button>
+  </div>
+</div>
+</body>
+</html>

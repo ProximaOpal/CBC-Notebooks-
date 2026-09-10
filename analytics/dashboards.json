@@ -1,0 +1,29 @@
+{
+  "title": "CBC Notebooks intent dashboards",
+  "insights": [
+    {
+      "id": "top_search_terms_by_grade",
+      "name": "Top 10 search terms by grade level",
+      "source_event": "search_performed",
+      "group_by": ["grade_level", "query"],
+      "metric": "count"
+    },
+    {
+      "id": "downloads_vs_missing",
+      "name": "Most downloaded papers vs missing content searches",
+      "series": [
+        { "event": "exam_download_clicked", "label": "downloads" },
+        { "event": "search_zero_results", "label": "missing_searches" }
+      ],
+      "group_by": ["subject_name"]
+    },
+    {
+      "id": "avg_lab_duration",
+      "name": "Average duration in 3D technical experiments",
+      "source_event": "lab_time_spent",
+      "metric": "avg",
+      "property": "timestamp_s",
+      "group_by": ["experiment_name"]
+    }
+  ]
+}
