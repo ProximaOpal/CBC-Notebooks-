@@ -81,11 +81,36 @@ function stepSubject(dir) {
   stepList(dir);
 }
 
+function applyPhoto(url, fallback) {
+  const photo = $("panelPhoto");
+  const run = (src) => {
+    if (photo) photo.style.backgroundImage = "url('" + src + "')";
+    slideToPhoto(src);
+  };
+  if (!url) {
+    run(fallback);
+    return;
+  }
+  const probe = new Image();
+  probe.onload = () => run(url);
+  probe.onerror = () => run(fallback || url);
+  probe.src = url;
+}
+
+function activePhoto() {
+  if (activeSubject) {
+    const topic = activeSubject.topics[listCursor];
+    return (topic && topic.photo) || activeSubject.photo;
+  }
+  const items = displayedItems();
+  const current = items[listCursor] || items[0];
+  return current ? current.photo : "/assets/img/subjects/up-math.png";
+}
+
 function updateChrome() {
   const kicker = $("panelKicker");
   const title = $("panelTitle");
   const num = $("panelNum");
-  const photo = $("panelPhoto");
   const dots = $("panelDots");
   const back = $("panelBack");
   const titleBack = $("titleBack");
@@ -98,7 +123,7 @@ function updateChrome() {
     if (title) title.textContent = withPeriod(activeSubject.name);
     const idx = SUBJECTS.findIndex((sub) => sub.id === activeSubject.id);
     if (num) num.textContent = pad2(idx + 1);
-    if (photo) photo.style.backgroundImage = "url('" + activeSubject.photo + "')";
+    applyPhoto(activePhoto(), activeSubject.photo);
     if (dots) {
       dots.innerHTML = items.map((_, i) =>
         '<button type="button" data-dot="' + i + '" class="' + (i === listCursor ? "is-on" : "") + '" aria-label="Topic ' + (i + 1) + '"></button>'
@@ -108,7 +133,7 @@ function updateChrome() {
     const current = items[listCursor] || items[0];
     if (title) title.textContent = current ? withPeriod(current.name) : "The Subjects.";
     if (num) num.textContent = pad2(listCursor + 1);
-    if (photo && current) photo.style.backgroundImage = "url('" + current.photo + "')";
+    applyPhoto(current ? current.photo : null, "/assets/img/subjects/up-math.png");
     if (dots) {
       dots.innerHTML = items.slice(0, 8).map((_, i) =>
         '<button type="button" data-dot="' + i + '" class="' + (i === listCursor ? "is-on" : "") + '" aria-label="Item ' + (i + 1) + '"></button>'

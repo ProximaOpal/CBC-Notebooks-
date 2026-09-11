@@ -6,6 +6,7 @@ function topics(subjectId, rows) {
     id: `${subjectId}-${i}`,
     name,
     detail,
+    photo: `/assets/img/topics/${subjectId}-${i}.png`,
   }));
 }
 

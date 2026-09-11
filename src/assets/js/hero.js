@@ -49,8 +49,14 @@ export function goToSlide(next) {
 }
 
 export function slideToPhoto(url) {
+  if (!url) return;
   const idx = SLIDE_PHOTOS.indexOf(url);
-  if (idx >= 0) goToSlide(idx);
+  if (idx >= 0) {
+    goToSlide(idx);
+    return;
+  }
+  const slideA = $("slideA");
+  if (slideA) setSlideImage(slideA, url);
 }
 
 export function pauseAutoplay() {

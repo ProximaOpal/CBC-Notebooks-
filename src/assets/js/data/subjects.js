@@ -9,6 +9,7 @@ function topics(subjectId, rows) {
     id: `${subjectId}-${i}`,
     name,
     detail,
+    photo: `/assets/img/topics/${subjectId}-${i}.png`,
   }));
 }
 
@@ -17,7 +18,6 @@ const CORE_SUBJECTS = [
     id: "up-math",
     name: "Mathematics",
     level: "up",
-    photo: "/assets/img/sub-math.png",
     tint: "#2ec4b6",
     topics: topics("up-math", [
       ["Numbers", "Whole numbers, Addition, Subtraction, Multiplication, Division, Fractions, Decimals."],
@@ -291,7 +291,10 @@ const CORE_SUBJECTS = [
   },
 ];
 
-const SUBJECTS = CORE_SUBJECTS.concat(SENIOR_SUBJECTS);
+const SUBJECTS = CORE_SUBJECTS.concat(SENIOR_SUBJECTS).map((s) => ({
+  ...s,
+  photo: `/assets/img/subjects/${s.id}.png`,
+}));
 
 export function matchesSubject(s, q) {
   if (!q) return true;
