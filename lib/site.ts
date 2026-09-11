@@ -1,4 +1,4 @@
-export const PRODUCTION_ORIGIN = "https://cbcnotebooks.co.ke";
+export const PRODUCTION_ORIGIN = "https://cbc-notebooks-v7aa.onrender.com";
 
 export function isLoopbackUrl(value: string) {
   const raw = String(value || "").trim();

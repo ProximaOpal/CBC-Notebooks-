@@ -94,6 +94,8 @@ function putIntent(intent: StkIntent) {
 }
 
 function darajaBase() {
+  const explicit = process.env.MPESA_BASE_URL?.trim();
+  if (explicit) return explicit.replace(/\/$/, "");
   return process.env.MPESA_ENV === "production"
     ? "https://api.safaricom.co.ke"
     : "https://sandbox.safaricom.co.ke";

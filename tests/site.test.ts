@@ -17,9 +17,9 @@ describe("production site origin", () => {
     process.env.AUTH_URL = "http://localhost:8080";
     process.env.NEXT_PUBLIC_SITE_URL = "http://localhost:3000";
     delete process.env.RENDER_EXTERNAL_URL;
-    expect(publicSiteOrigin()).toBe("https://cbcnotebooks.co.ke");
+    expect(publicSiteOrigin()).toBe("https://cbc-notebooks-v7aa.onrender.com");
     expect(publicAbsoluteUrl("http://localhost:3000/api/payments/mpesa/callback", "/api/payments/mpesa/callback")).toBe(
-      "https://cbcnotebooks.co.ke/api/payments/mpesa/callback"
+      "https://cbc-notebooks-v7aa.onrender.com/api/payments/mpesa/callback"
     );
   });
 });
