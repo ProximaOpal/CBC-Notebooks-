@@ -50,4 +50,13 @@ describe("prerendered HTML", () => {
     expect(html).toContain('id="seoDocument"');
     expect(html).toContain('class="hero"');
   });
+
+  it("keeps Notes and other home resource controls as overlay buttons", () => {
+    const home = renderHtml(shell, "/").html;
+    const notes = renderHtml(shell, "/notes/").html;
+    for (const html of [home, notes]) {
+      expect(html).toContain('<button class="res-btn res-btn--solid" type="button" data-resource="notes">Notes</button>');
+      expect(html).not.toMatch(/<aside class="hero__resources"[\s\S]*?<a class="res-btn/);
+    }
+  });
 });

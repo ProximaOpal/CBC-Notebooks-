@@ -301,17 +301,6 @@ function replaceHead(html, model) {
   return next;
 }
 
-function setResourceLinks(html) {
-  const buttons = RESOURCE_HUBS.map((h) => {
-    const cls = h.outline ? "res-btn res-btn--outline" : "res-btn res-btn--solid";
-    return `<a class="${cls}" href="${h.path}" data-resource="${h.id}">${esc(h.label)}</a>`;
-  }).join("\n      ");
-  return html.replace(
-    /<aside class="hero__resources"[\s\S]*?<\/aside>/,
-    `<aside class="hero__resources" id="resourceBtns" aria-label="Resources">\n      ${buttons}\n    </aside>`
-  );
-}
-
 function injectDocument(html, model) {
   const block = `<main id="seoDocument" class="seo" aria-hidden="true">${documentHtml(model)}</main>`;
   if (html.includes('id="seoDocument"')) {
@@ -331,7 +320,6 @@ function setBody(html, model) {
 export function renderHtml(shell, route) {
   const model = pageModel(route);
   let html = replaceHead(shell, model);
-  html = setResourceLinks(html);
   html = injectDocument(html, model);
   html = setBody(html, model);
   html = rewriteRootAssets(html, "");

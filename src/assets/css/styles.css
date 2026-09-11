@@ -247,6 +247,8 @@ button{ font-family:inherit; }
   padding:0 20px;
   border-radius:0;
   cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
   font-family:var(--font-body);
   font-weight:600;
   font-size:0.68rem;
@@ -534,6 +536,8 @@ button{ font-family:inherit; }
   padding:14px 16px;
   background:#f6f6f6;
   border:none;
+  appearance:none;
+  -webkit-appearance:none;
   border-radius:0;
   text-align:left;
   cursor:pointer;
@@ -1235,7 +1239,7 @@ html.is-pwa a[data-install]{ display:none; }
   .hero__strip.is-moving, .sheet{ transition:none; animation:none; }
 }
 
-/* Crawler HTML stays in the document for Googlebot. It must not change the overlay UX. */
+/* Crawler HTML stays in the document for Googlebot. It must not cover home buttons. */
 .seo{
   position:absolute !important;
   width:1px !important;
@@ -1249,7 +1253,8 @@ html.is-pwa a[data-install]{ display:none; }
   border:0 !important;
   top:0;
   left:0;
-  pointer-events:none;
+  z-index:-1;
+  pointer-events:none !important;
 }
 
 @media print{

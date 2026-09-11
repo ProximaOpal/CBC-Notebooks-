@@ -1,7 +1,5 @@
 import { $ } from "./lib/dom.js";
 import { openPanel } from "./panel.js";
-import { openPayOverlay } from "./pay-overlay.js";
-import { openAuthOverlay } from "./auth-overlay.js";
 import {
   trackSearch,
   debounceSearch,
@@ -54,6 +52,7 @@ async function runAsk(query) {
     latency_ms: Math.round(performance.now() - started),
     query_id,
   });
+  openPanel(file_type, q);
   try {
     const res = await fetch("/api/ask-ai", {
       method: "POST",
@@ -61,20 +60,14 @@ async function runAsk(query) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: q }),
     });
-    if (res.status === 401) {
-      openAuthOverlay("signin");
-      return;
-    }
     if (res.status === 402) {
       const data = await res.json().catch(() => ({}));
+      const { openPayOverlay } = await import("./pay-overlay.js");
       openPayOverlay({ sku: data.sku || "ask-ai-daily" });
-      return;
     }
-    if (!res.ok) return;
   } catch {
-    return;
+    /* overlay already open */
   }
-  openPanel(file_type, q);
 }
 
 export function initAskBar() {

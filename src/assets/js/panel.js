@@ -2,12 +2,7 @@ import { LIST_PAGE, RESOURCE_LABEL, LEVEL_LABEL } from "./config.js";
 import { $, pad2, withPeriod } from "./lib/dom.js";
 import { SUBJECTS, matchesSubject } from "./data/subjects.js";
 import { parsePath } from "./data/catalog.js";
-import { subjectUrl } from "./lib/routes.js";
 import { slideToPhoto, pauseAutoplay, restartAutoplay } from "./hero.js";
-import { openPayOverlay } from "./pay-overlay.js";
-import { skuForResource } from "./data/payments.js";
-import { openAuthOverlay } from "./auth-overlay.js";
-import { openDrmViewer } from "./drm.js";
 import {
   trackResourceOpened,
   trackDownload,
@@ -197,11 +192,11 @@ function groupBlock(label, items, flat) {
   return '<p class="panel__group">' + label + "</p>" + items.map((s) => {
     const idx = flat.findIndex((x) => x.id === s.id);
     const on = idx === listCursor;
-    return '<a class="panel__item' + (on ? " is-active" : "") + '" href="' + subjectUrl(s, resource) + '" data-subject="' + s.id + '">' +
+    return '<button class="panel__item' + (on ? " is-active" : "") + '" type="button" data-subject="' + s.id + '">' +
       '<span class="panel__item-body">' +
         '<span class="panel__item-name">' + s.name + '</span>' +
         '<span class="panel__item-detail">' + s.topics.length + ' topics</span>' +
-      '</span></a>';
+      '</span></button>';
   }).join("");
 }
 
@@ -219,9 +214,7 @@ function renderPanel() {
     const ss = slice.filter((sub) => sub.level === "ss");
     list.innerHTML = groupBlock(LEVEL_LABEL.up, up, items) + groupBlock(LEVEL_LABEL.jss, jss, items) + groupBlock(LEVEL_LABEL.ss, ss, items);
     list.querySelectorAll("[data-subject]").forEach((btn) => {
-      btn.addEventListener("click", (event) => {
-        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-        event.preventDefault();
+      btn.addEventListener("click", () => {
         const found = SUBJECTS.find((sub) => sub.id === btn.dataset.subject);
         if (!found) return;
         const gradeLevel = found.level === "up" ? "Upper Primary" : found.level === "ss" ? "Senior School" : "Junior Secondary";
@@ -310,11 +303,16 @@ async function openProtectedResource(gradeLevel) {
       credentials: "include",
     });
     if (res.status === 401) {
+      const { openAuthOverlay } = await import("./auth-overlay.js");
       openAuthOverlay("signin");
       statusMessage("Sign in to open this resource");
       return;
     }
     if (res.status === 402) {
+      const [{ openPayOverlay }, { skuForResource }] = await Promise.all([
+        import("./pay-overlay.js"),
+        import("./data/payments.js"),
+      ]);
       openPayOverlay({
         sku: skuForResource(resource).sku,
         subject: activeSubject.name,
@@ -327,6 +325,7 @@ async function openProtectedResource(gradeLevel) {
       statusMessage("Unable to open this resource");
       return;
     }
+    const { openDrmViewer } = await import("./drm.js");
     const type = res.headers.get("content-type") || "";
     if (type.includes("application/json")) {
       openDrmViewer({ title: activeSubject.name, payload: await res.json() });
@@ -375,7 +374,6 @@ function hydrateFromLocation() {
 export function initPanel() {
   document.querySelectorAll(".res-btn").forEach((btn) => {
     btn.addEventListener("click", (event) => {
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
       const kind = btn.dataset.resource;
       if (!kind || !RESOURCE_LABEL[kind]) return;
       event.preventDefault();
