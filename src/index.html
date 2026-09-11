@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-KE">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -10,16 +10,23 @@
 <meta name="apple-mobile-web-app-title" content="CBC Notebooks" />
 <title>CBC Notebooks — Learning, Kenya</title>
 <link rel="canonical" href="https://cbcnotebooks.co.ke/" />
+<meta name="description" content="CBC Notebooks publishes KICD-aligned notes, videos, exams, galleries and virtual labs for Kenya Grades 4–10 — from KPSEA through KJSEA and KSSEA." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://cbcnotebooks.co.ke/" />
 <meta property="og:title" content="CBC Notebooks — Learning, Kenya" />
+<meta property="og:description" content="CBC Notebooks publishes KICD-aligned notes, videos, exams, galleries and virtual labs for Kenya Grades 4–10 — from KPSEA through KJSEA and KSSEA." />
+<meta property="og:image" content="https://cbcnotebooks.co.ke/assets/img/icons/icon-512.png" />
 <meta property="og:site_name" content="CBC Notebooks" />
-<link rel="manifest" href="manifest.webmanifest" />
-<link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png" />
-<link rel="icon" type="image/png" sizes="192x192" href="assets/img/icons/icon-192.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CBC Notebooks — Learning, Kenya" />
+<meta name="twitter:description" content="CBC Notebooks publishes KICD-aligned notes, videos, exams, galleries and virtual labs for Kenya Grades 4–10 — from KPSEA through KJSEA and KSSEA." />
+<meta name="twitter:image" content="https://cbcnotebooks.co.ke/assets/img/icons/icon-512.png" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/assets/img/icons/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/icons/icon-192.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/styles.css" />
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="application/ld+json">
 {
@@ -88,14 +95,14 @@
 }
 </script>
 </head>
-<body>
+<body data-route="/" data-route-type="home">
 
 <header class="hero" id="hero">
   <div class="hero__frame">
 
     <div class="hero__viewport">
       <div class="hero__strip" id="heroStrip">
-        <div class="hero__slide" id="slideA" style="background-image:url('assets/img/sub-math.png');"></div>
+        <div class="hero__slide" id="slideA" style="background-image:url('/assets/img/sub-math.png');"></div>
         <div class="hero__slide" id="slideB"></div>
       </div>
     </div>
@@ -103,8 +110,10 @@
 
     <nav class="nav">
       <div class="nav__brand">
-        <span class="nav__mark">CBC</span>
-        <span class="nav__brandtext">CBC Notebooks</span>
+        <a href="/" class="nav__brand-link">
+          <span class="nav__mark">CBC</span>
+          <span class="nav__brandtext">CBC Notebooks</span>
+        </a>
       </div>
       <form class="ask" id="askForm" role="search">
         <input id="askInput" type="search" name="q" placeholder="Ask AI" autocomplete="off" />
@@ -116,7 +125,14 @@
         </button>
       </form>
       <ul class="nav__links">
-        <li><a href="#hero" class="is-active">Home</a></li>
+        <li><a href="/" class="is-active">Home</a></li>
+        <li class="nav__grade"><a href="/grade-4/">Grade 4</a></li>
+        <li class="nav__grade"><a href="/grade-5/">Grade 5</a></li>
+        <li class="nav__grade"><a href="/grade-6/">Grade 6</a></li>
+        <li class="nav__grade"><a href="/grade-7/">Grade 7</a></li>
+        <li class="nav__grade"><a href="/grade-8/">Grade 8</a></li>
+        <li class="nav__grade"><a href="/grade-9/">Grade 9</a></li>
+        <li class="nav__grade"><a href="/grade-10/">Grade 10</a></li>
         <li><a href="#install" data-install>Download app</a></li>
         <li class="nav__guest">
           <button type="button" data-auth-open="signin" aria-haspopup="dialog" aria-expanded="false">Sign in</button>
@@ -137,25 +153,35 @@
     </nav>
 
     <div class="hero__content">
-      <p class="hero__eyebrow">Grade 4 — Grade 9 · CBC Curriculum</p>
+      <p class="hero__eyebrow">Grade 4 — Grade 10 · CBC Curriculum · KPSEA · KJSEA · KSSEA</p>
       <h1 class="hero__title">
         <span class="hero__title-thin">CBC</span>
         <span class="hero__title-bold">NOTEBOOKS</span>
       </h1>
       <p class="hero__copy">
         One notebook for every subject in Kenya's CBC ecosystem — notes, videos,
-        galleries, experiments and exams for Upper Primary and Junior Secondary.
+        galleries, experiments and exams for Upper Primary (KPSEA), Junior Secondary (KJSEA)
+        and Senior School Grade 10 (KSSEA), aligned to KICD.
       </p>
+      <nav class="hero__grades" aria-label="CBC grades">
+        <a href="/grade-4/">Grade 4</a>
+        <a href="/grade-5/">Grade 5</a>
+        <a href="/grade-6/">Grade 6</a>
+        <a href="/grade-7/">Grade 7</a>
+        <a href="/grade-8/">Grade 8</a>
+        <a href="/grade-9/">Grade 9</a>
+        <a href="/grade-10/">Grade 10</a>
+      </nav>
     </div>
 
     <aside class="hero__resources" id="resourceBtns" aria-label="Resources">
-      <button class="res-btn res-btn--solid" data-resource="notes">Notes</button>
-      <button class="res-btn res-btn--outline" data-resource="videos">Videos</button>
-      <button class="res-btn res-btn--solid" data-resource="gallery">Photo Gallery</button>
-      <button class="res-btn res-btn--outline" data-resource="experiments">Experiments</button>
-      <button class="res-btn res-btn--solid" data-resource="audiobooks">AudioBooks</button>
-      <button class="res-btn res-btn--outline" data-resource="immersive">Immersive Learning</button>
-      <button class="res-btn res-btn--solid" data-resource="exams">Exams</button>
+      <a class="res-btn res-btn--solid" href="/notes/" data-resource="notes">Notes</a>
+      <a class="res-btn res-btn--outline" href="/videos/" data-resource="videos">Videos</a>
+      <a class="res-btn res-btn--solid" href="/gallery/" data-resource="gallery">Photo Gallery</a>
+      <a class="res-btn res-btn--outline" href="/labs/" data-resource="experiments">Experiments</a>
+      <a class="res-btn res-btn--solid" href="/audiobooks/" data-resource="audiobooks">AudioBooks</a>
+      <a class="res-btn res-btn--outline" href="/immersive/" data-resource="immersive">Immersive Learning</a>
+      <a class="res-btn res-btn--solid" href="/exams/" data-resource="exams">Exams</a>
     </aside>
 
     <div class="hero__footer">
@@ -209,6 +235,31 @@
 
   </div>
 </header>
+
+<main id="seoDocument" class="seo">
+  <nav class="seo__crumbs" aria-label="Breadcrumb"><a href="/">Home</a></nav>
+  <h2>Kenya CBC notes, exams and labs for Grades 4–10</h2>
+  <p>CBC Notebooks is a KICD-aligned library for Kenya Grades 4–10. Learners, parents and teachers can open notes, KPSEA and KJSEA exams, marking schemes, video lessons and virtual laboratories without waiting for JavaScript.</p>
+  <h2>Browse by grade</h2>
+  <ul class="seo__grades">
+    <li><a href="/grade-4/">Grade 4</a></li>
+    <li><a href="/grade-5/">Grade 5</a></li>
+    <li><a href="/grade-6/">Grade 6</a></li>
+    <li><a href="/grade-7/">Grade 7</a></li>
+    <li><a href="/grade-8/">Grade 8</a></li>
+    <li><a href="/grade-9/">Grade 9</a></li>
+    <li><a href="/grade-10/">Grade 10</a></li>
+  </ul>
+  <h2>Resource libraries</h2>
+  <ul>
+    <li><a href="/notes/">Notes</a></li>
+    <li><a href="/exams/">Exams</a></li>
+    <li><a href="/videos/">Videos</a></li>
+    <li><a href="/labs/">Labs</a></li>
+    <li><a href="/notes/grade-7/integrated-science/">Grade 7 Integrated Science</a></li>
+    <li><a href="/grade-7/science/">Grade 7 Science</a></li>
+  </ul>
+</main>
 
 <div class="panel" id="panel" hidden>
   <article class="sheet" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
@@ -265,7 +316,7 @@
           <button class="sheet__side" id="panelLeft" type="button" aria-label="Previous">
             <svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>
           </button>
-          <div class="sheet__photo" id="panelPhoto" style="background-image:url('assets/img/sub-math.png');">
+          <div class="sheet__photo" id="panelPhoto" style="background-image:url('/assets/img/sub-math.png');">
             <span class="sheet__photo-mark" aria-hidden="true"></span>
           </div>
           <button class="sheet__side sheet__side--right" id="panelRight" type="button" aria-label="Next">
@@ -310,8 +361,6 @@
   </article>
 </div>
 
-<script type="module" src="assets/js/main.js"></script>
-
 <div class="overlay" id="overlayAdd" hidden>
   <article class="overlay__sheet" role="dialog" aria-labelledby="addTitle">
     <button class="overlay__close" type="button" data-overlay-close aria-label="Close"></button>
@@ -350,6 +399,7 @@
           <option>Grade 7</option>
           <option>Grade 8</option>
           <option>Grade 9</option>
+          <option>Grade 10</option>
         </select>
       </label>
       <label>Title<input name="title" type="text" required /></label>
@@ -394,6 +444,7 @@
           <option>Grade 7</option>
           <option>Grade 8</option>
           <option>Grade 9</option>
+          <option>Grade 10</option>
         </select>
       </label>
       <label>Subject<input name="subject" type="text" required placeholder="e.g. Integrated Science" /></label>
@@ -448,7 +499,7 @@
   >
     <button class="auth-card__close" type="button" data-auth-close aria-label="Close"></button>
     <div class="auth-card__art">
-      <img src="assets/img/auth-art.png" alt="" />
+      <img src="/assets/img/auth-art.png" alt="" />
       <p class="auth-card__brand">FREELANCER</p>
     </div>
     <div class="auth-card__form">
@@ -523,5 +574,6 @@
     <button class="install-tip__ok" id="installTipClose" type="button">OK</button>
   </div>
 </div>
+<script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>

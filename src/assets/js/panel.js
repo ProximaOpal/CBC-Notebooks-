@@ -1,6 +1,8 @@
 import { LIST_PAGE, RESOURCE_LABEL, LEVEL_LABEL } from "./config.js";
 import { $, pad2, withPeriod } from "./lib/dom.js";
 import { SUBJECTS, matchesSubject } from "./data/subjects.js";
+import { parsePath } from "./data/catalog.js";
+import { subjectUrl } from "./lib/routes.js";
 import { slideToPhoto, pauseAutoplay, restartAutoplay } from "./hero.js";
 import {
   trackResourceOpened,
@@ -166,11 +168,11 @@ function groupBlock(label, items, flat) {
   return '<p class="panel__group">' + label + "</p>" + items.map((s) => {
     const idx = flat.findIndex((x) => x.id === s.id);
     const on = idx === listCursor;
-    return '<button class="panel__item' + (on ? " is-active" : "") + '" type="button" data-subject="' + s.id + '">' +
+    return '<a class="panel__item' + (on ? " is-active" : "") + '" href="' + subjectUrl(s, resource) + '" data-subject="' + s.id + '">' +
       '<span class="panel__item-body">' +
         '<span class="panel__item-name">' + s.name + '</span>' +
         '<span class="panel__item-detail">' + s.topics.length + ' topics</span>' +
-      '</span></button>';
+      '</span></a>';
   }).join("");
 }
 
@@ -185,16 +187,20 @@ function renderPanel() {
   if (!activeSubject) {
     const up = slice.filter((sub) => sub.level === "up");
     const jss = slice.filter((sub) => sub.level === "jss");
-    list.innerHTML = groupBlock(LEVEL_LABEL.up, up, items) + groupBlock(LEVEL_LABEL.jss, jss, items);
+    const ss = slice.filter((sub) => sub.level === "ss");
+    list.innerHTML = groupBlock(LEVEL_LABEL.up, up, items) + groupBlock(LEVEL_LABEL.jss, jss, items) + groupBlock(LEVEL_LABEL.ss, ss, items);
     list.querySelectorAll("[data-subject]").forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
         const found = SUBJECTS.find((sub) => sub.id === btn.dataset.subject);
         if (!found) return;
+        const gradeLevel = found.level === "up" ? "Upper Primary" : found.level === "ss" ? "Senior School" : "Junior Secondary";
         trackSearchResultClicked({
           query_id: newQueryId(),
           position: items.findIndex((x) => x.id === found.id),
           subject_name: found.name,
-          grade_level: found.level === "up" ? "Upper Primary" : "Junior Secondary",
+          grade_level: gradeLevel,
         });
         activeSubject = found;
         listCursor = 0;
@@ -287,9 +293,31 @@ function syncListNav() {
   down.classList.toggle("is-off", !many || page >= pages - 1);
 }
 
+function hydrateFromLocation() {
+  const route = parsePath(location.pathname);
+  if (route.type && route.type !== "home" && route.type !== "unknown") {
+    document.body.classList.add("is-seo-page");
+  }
+  if (route.resource && RESOURCE_LABEL[route.resource]) {
+    resource = route.resource;
+  } else if (route.type === "lab") {
+    resource = "experiments";
+  }
+  if (route.subject) {
+    activeSubject = route.subject;
+    listCursor = 0;
+  }
+}
+
 export function initPanel() {
   document.querySelectorAll(".res-btn").forEach((btn) => {
-    btn.addEventListener("click", () => openPanel(btn.dataset.resource));
+    btn.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      const kind = btn.dataset.resource;
+      if (!kind || !RESOURCE_LABEL[kind]) return;
+      event.preventDefault();
+      openPanel(kind);
+    });
   });
   const closeBtn = $("panelClose");
   if (closeBtn) closeBtn.addEventListener("click", closePanel);
@@ -359,7 +387,7 @@ export function initPanel() {
     if (verb === "Download") {
       trackDownload({
         subject_name: activeSubject.name,
-        grade_level: activeSubject.level === "up" ? "Upper Primary" : "Junior Secondary",
+        grade_level: activeSubject.level === "up" ? "Upper Primary" : activeSubject.level === "ss" ? "Senior School" : "Junior Secondary",
         document_type: resource,
         filename: names.join(", "),
       });
@@ -382,6 +410,7 @@ export function initPanel() {
   if (download) download.addEventListener("click", () => act("Download"));
   if (share) share.addEventListener("click", () => act("Share"));
 
+  hydrateFromLocation();
   const kind = new URLSearchParams(location.search).get("resource");
   if (kind && RESOURCE_LABEL[kind]) openPanel(kind);
 }

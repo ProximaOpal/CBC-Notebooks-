@@ -1,6 +1,9 @@
 /**
- * Curriculum catalogue — Upper Primary (Grades 4–6) and Junior Secondary (Grades 7–9).
+ * Curriculum catalogue — Upper Primary (Grades 4–6), Junior Secondary (Grades 7–9)
+ * and Senior School (Grade 10).
  */
+import { SENIOR_SUBJECTS } from "./senior.js";
+
 function topics(subjectId, rows) {
   return rows.map(([name, detail], i) => ({
     id: `${subjectId}-${i}`,
@@ -9,12 +12,12 @@ function topics(subjectId, rows) {
   }));
 }
 
-const SUBJECTS = [
+const CORE_SUBJECTS = [
   {
     id: "up-math",
     name: "Mathematics",
     level: "up",
-    photo: "assets/img/sub-math.png",
+    photo: "/assets/img/sub-math.png",
     tint: "#2ec4b6",
     topics: topics("up-math", [
       ["Numbers", "Whole numbers, Addition, Subtraction, Multiplication, Division, Fractions, Decimals."],
@@ -28,7 +31,7 @@ const SUBJECTS = [
     id: "up-eng",
     name: "English Language",
     level: "up",
-    photo: "assets/img/sub-english.png",
+    photo: "/assets/img/sub-english.png",
     tint: "#ff6a4a",
     topics: topics("up-eng", [
       ["Listening & Speaking", "Pronunciation, Listening comprehension, Public speaking, Conversation, Storytelling."],
@@ -41,7 +44,7 @@ const SUBJECTS = [
     id: "up-kis",
     name: "Kiswahili / Kenya Sign Language",
     level: "up",
-    photo: "assets/img/sub-kiswahili.png",
+    photo: "/assets/img/sub-kiswahili.png",
     tint: "#e84a8a",
     topics: topics("up-kis", [
       ["Kusikiliza na Kuzungumza", "Vitendawili, Methali, Mazungumzo, Risala, Drama."],
@@ -54,7 +57,7 @@ const SUBJECTS = [
     id: "up-sci",
     name: "Science and Technology",
     level: "up",
-    photo: "assets/img/sub-science.png",
+    photo: "/assets/img/sub-science.png",
     tint: "#7cb342",
     topics: topics("up-sci", [
       ["Living Things & Environment", "Plants (classification, functions), Animals (vertebrates, invertebrates), Human body systems (Digestive, Respiratory)."],
@@ -67,7 +70,7 @@ const SUBJECTS = [
     id: "up-agr",
     name: "Agriculture and Nutrition",
     level: "up",
-    photo: "assets/img/sub-agriculture.png",
+    photo: "/assets/img/sub-agriculture.png",
     tint: "#c4a035",
     topics: topics("up-agr", [
       ["Conserving Agricultural Environment", "Soil conservation, Water harvesting, Compost making."],
@@ -81,7 +84,7 @@ const SUBJECTS = [
     id: "up-arts",
     name: "Creative Arts",
     level: "up",
-    photo: "assets/img/sub-arts.png",
+    photo: "/assets/img/sub-arts.png",
     tint: "#7e6bff",
     topics: topics("up-arts", [
       ["Picture Making", "Drawing (Smudge, Value graduation), Painting, Collage, Mosaic."],
@@ -95,7 +98,7 @@ const SUBJECTS = [
     id: "up-ss",
     name: "Social Studies",
     level: "up",
-    photo: "assets/img/sub-social.png",
+    photo: "/assets/img/sub-social.png",
     tint: "#3d8bfd",
     topics: topics("up-ss", [
       ["Natural Environment", "Physical features, Weather and climate, Vegetation patterns."],
@@ -109,7 +112,7 @@ const SUBJECTS = [
     id: "up-phe",
     name: "Physical and Health Education",
     level: "up",
-    photo: "assets/img/sub-phe.png",
+    photo: "/assets/img/sub-phe.png",
     tint: "#2ec4b6",
     topics: topics("up-phe", [
       ["Athletics", "Running events, Jumping events, Throwing events."],
@@ -121,7 +124,7 @@ const SUBJECTS = [
     id: "up-re",
     name: "Religious Education",
     level: "up",
-    photo: "assets/img/sub-re.png",
+    photo: "/assets/img/sub-re.png",
     tint: "#ff6a4a",
     topics: topics("up-re", [
       ["Christian Religious Education (CRE)", "Creation, The Bible, Life and Ministry of Jesus Christ, The Early Church, Christian Living, Christian Values."],
@@ -133,7 +136,7 @@ const SUBJECTS = [
     id: "jss-math",
     name: "Mathematics",
     level: "jss",
-    photo: "assets/img/sub-math.png",
+    photo: "/assets/img/sub-math.png",
     tint: "#2ec4b6",
     topics: topics("jss-math", [
       ["Numbers", "Rational numbers, Real numbers, Prime factorization, Squares and Square roots, Cubes and Cube roots, Rates, Ratios, Percentages, Proportions, Commercial Arithmetic."],
@@ -147,7 +150,7 @@ const SUBJECTS = [
     id: "jss-sci",
     name: "Integrated Science",
     level: "jss",
-    photo: "assets/img/sub-science.png",
+    photo: "/assets/img/sub-science.png",
     tint: "#7cb342",
     topics: topics("jss-sci", [
       ["Scientific Exploration", "Scientific inquiry skills, Laboratory apparatus and safety, Measurements in science."],
@@ -161,7 +164,7 @@ const SUBJECTS = [
     id: "jss-tech",
     name: "Pre-Technical and Pre-Career Education",
     level: "jss",
-    photo: "assets/img/sub-tech.png",
+    photo: "/assets/img/sub-tech.png",
     tint: "#c4a035",
     topics: topics("jss-tech", [
       ["Technical Drawing", "Drawing instruments, Freehand sketching, Plane geometry drawing, Orthographic and Isometric projections."],
@@ -175,7 +178,7 @@ const SUBJECTS = [
     id: "jss-agr",
     name: "Agriculture and Nutrition",
     level: "jss",
-    photo: "assets/img/sub-agriculture.png",
+    photo: "/assets/img/sub-agriculture.png",
     tint: "#7cb342",
     topics: topics("jss-agr", [
       ["Agricultural Environment", "Soil fertility management, Soil erosion control, Water harvesting and management."],
@@ -189,7 +192,7 @@ const SUBJECTS = [
     id: "jss-ss",
     name: "Social Studies",
     level: "jss",
-    photo: "assets/img/sub-social.png",
+    photo: "/assets/img/sub-social.png",
     tint: "#3d8bfd",
     topics: topics("jss-ss", [
       ["Physical & Human Geography", "Map work, Internal/External land-forming processes, Weather and Climate zones, Population distribution, Urbanization."],
@@ -201,7 +204,7 @@ const SUBJECTS = [
     id: "jss-bus",
     name: "Business Studies",
     level: "jss",
-    photo: "assets/img/sub-business.png",
+    photo: "/assets/img/sub-business.png",
     tint: "#e84a8a",
     topics: topics("jss-bus", [
       ["Introduction to Business", "Meaning, Importance, Business environment, Internal and external factors."],
@@ -215,7 +218,7 @@ const SUBJECTS = [
     id: "jss-health",
     name: "Health Education",
     level: "jss",
-    photo: "assets/img/sub-health.png",
+    photo: "/assets/img/sub-health.png",
     tint: "#ff6a4a",
     topics: topics("jss-health", [
       ["Human Body & Health", "Personal hygiene, Growth and development, Adolescent health, Reproductive health."],
@@ -228,7 +231,7 @@ const SUBJECTS = [
     id: "jss-arts",
     name: "Creative Arts and Sports",
     level: "jss",
-    photo: "assets/img/sub-arts.png",
+    photo: "/assets/img/sub-arts.png",
     tint: "#7e6bff",
     topics: topics("jss-arts", [
       ["Visual Arts", "Drawing, Painting, Sculpting, Graphic design, Photography, Indigenous arts and craft exhibition."],
@@ -240,7 +243,7 @@ const SUBJECTS = [
     id: "jss-eng",
     name: "English Language",
     level: "jss",
-    photo: "assets/img/sub-english.png",
+    photo: "/assets/img/sub-english.png",
     tint: "#ff6a4a",
     topics: topics("jss-eng", [
       ["Listening & Speaking", "Active listening, Debating, Oration, Interviewing skills, Oral literature presentation."],
@@ -253,7 +256,7 @@ const SUBJECTS = [
     id: "jss-kis",
     name: "Kiswahili / Kenya Sign Language",
     level: "jss",
-    photo: "assets/img/sub-kiswahili.png",
+    photo: "/assets/img/sub-kiswahili.png",
     tint: "#e84a8a",
     topics: topics("jss-kis", [
       ["Kusikiliza na Kuzungumza", "Majadiliano, Uhawilishaji wa taarifa, Hotuba, Utangazaji."],
@@ -266,7 +269,7 @@ const SUBJECTS = [
     id: "jss-re",
     name: "Religious Education",
     level: "jss",
-    photo: "assets/img/sub-re.png",
+    photo: "/assets/img/sub-re.png",
     tint: "#c4a035",
     topics: topics("jss-re", [
       ["Christian Religious Education (CRE)", "Old Testament (Creation, Ancestors of Faith, Exodus, Kings and Prophets), New Testament (Gospels, Parables, Miracles, Passion and Resurrection), Church History, Christian Ethics (Sexuality, Work, Wealth, Environment)."],
@@ -278,7 +281,7 @@ const SUBJECTS = [
     id: "jss-life",
     name: "Life Skills Education",
     level: "jss",
-    photo: "assets/img/sub-life.png",
+    photo: "/assets/img/sub-life.png",
     tint: "#2ec4b6",
     topics: topics("jss-life", [
       ["Self-Awareness & Management", "Self-esteem, Stress management, Emotion control, Time management."],
@@ -288,6 +291,7 @@ const SUBJECTS = [
   },
 ];
 
+const SUBJECTS = CORE_SUBJECTS.concat(SENIOR_SUBJECTS);
 
 export function matchesSubject(s, q) {
   if (!q) return true;

@@ -15,6 +15,8 @@ import {
   clearSessionCookie,
   isAllowedOrigin,
 } from "./lib/google-session.mjs";
+import { parsePath } from "../src/assets/js/data/catalog.js";
+import { renderHtml } from "./lib/prerender.mjs";
 
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const pub = join(root, "src");
@@ -201,6 +203,41 @@ async function handleC2bConfirmation(req, res) {
     at: new Date().toISOString(),
   }) + "\n", () => {});
   sendJson(res, 200, c2bAccept());
+}
+
+function callbackIpOk(req) {
+  const allow = String(process.env.MPESA_CALLBACK_IPS || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (!allow.length) return true;
+  const forwarded = String(req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "");
+  const ip = forwarded.split(",")[0]?.trim() || "";
+  return Boolean(ip) && allow.includes(ip);
+}
+
+async function handleStkCallback(req, res) {
+  if (!callbackIpOk(req)) {
+    return sendJson(res, 403, { ResultCode: 1, ResultDesc: "Forbidden" });
+  }
+  const body = JSON.parse((await readBody(req)) || "{}");
+  const callback = body?.Body?.stkCallback;
+  if (!callback) {
+    return sendJson(res, 400, { ResultCode: 1, ResultDesc: "Missing stkCallback" });
+  }
+  mkdirSync(dataDir, { recursive: true });
+  appendFile(
+    join(dataDir, "stk-callbacks.jsonl"),
+    JSON.stringify({
+      checkoutRequestId: callback.CheckoutRequestID,
+      merchantRequestId: callback.MerchantRequestID,
+      resultCode: callback.ResultCode,
+      resultDesc: callback.ResultDesc,
+      at: new Date().toISOString(),
+    }) + "\n",
+    () => {}
+  );
+  sendJson(res, 200, { ResultCode: 0, ResultDesc: "Accepted" });
 }
 
 async function handlePrivacyExport(req, res) {
@@ -391,13 +428,27 @@ function serveStatic(req, res) {
     send(res, 403, "forbidden");
     return;
   }
-  if (!existsSync(abs) || statSync(abs).isDirectory()) {
-    send(res, 404, "not found");
+  if (existsSync(abs) && statSync(abs).isFile()) {
+    const type = MIME[extname(abs)] || "application/octet-stream";
+    res.writeHead(200, { "Content-Type": type });
+    createReadStream(abs).pipe(res);
     return;
   }
-  const type = MIME[extname(abs)] || "application/octet-stream";
-  res.writeHead(200, { "Content-Type": type });
-  createReadStream(abs).pipe(res);
+  const asIndex = normalize(join(pub, decodeURIComponent(url.pathname), "index.html"));
+  if (asIndex.startsWith(pub) && existsSync(asIndex) && statSync(asIndex).isFile()) {
+    res.writeHead(200, { "Content-Type": MIME[".html"] });
+    createReadStream(asIndex).pipe(res);
+    return;
+  }
+  const route = parsePath(url.pathname);
+  if (route.type && route.type !== "unknown") {
+    const shell = readFileSync(join(pub, "index.html"), "utf8");
+    const { html } = renderHtml(shell, route);
+    res.writeHead(200, { "Content-Type": MIME[".html"], "Cache-Control": "no-store" });
+    res.end(html);
+    return;
+  }
+  send(res, 404, "not found");
 }
 
 const server = createServer((req, res) => {
@@ -437,6 +488,13 @@ const server = createServer((req, res) => {
   }
   if (req.method === "POST" && path === "/api/payments/mpesa/c2b-confirmation") {
     handleC2bConfirmation(req, res).catch(() => send(res, 400, "invalid json"));
+    return;
+  }
+  if (
+    req.method === "POST" &&
+    (path === "/api/payments/mpesa/callback" || path === "/api/payments/mpesa/stk-callback")
+  ) {
+    handleStkCallback(req, res).catch(() => send(res, 400, "invalid json"));
     return;
   }
   if (req.method === "POST" && path === "/api/privacy/export") {

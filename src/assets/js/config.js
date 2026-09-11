@@ -15,4 +15,5 @@ export const RESOURCE_LABEL = {
 export const LEVEL_LABEL = {
   up: "Upper Primary · Grades 4–6",
   jss: "Junior Secondary · Grades 7–9",
+  ss: "Senior School · Grade 10",
 };

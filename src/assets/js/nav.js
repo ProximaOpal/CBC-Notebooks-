@@ -19,7 +19,7 @@ function inferFileType(q) {
 }
 
 function inferGrade(q) {
-  const m = q.match(/grade\s*([4-9])/i);
+  const m = q.match(/grade\s*(10|[4-9])/i);
   return m ? "Grade " + m[1] : null;
 }
 
