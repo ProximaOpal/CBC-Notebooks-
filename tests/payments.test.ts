@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { quoteFromRequest } from "@/lib/payments/catalog";
 import { initiateSchema, quoteOrThrow } from "@/lib/payments/initiate-schema";
 import { toMsisdn } from "@/lib/payments/mpesa";
-import { applySuccess } from "@/lib/payments/entitlements";
+import { applySuccess, hasEntitlement, hasKindAccess } from "@/lib/payments/entitlements";
+import { canAskAi, recordAiQuery } from "@/lib/payments/ai-quota";
 import { rememberStkIntent, recordStkCallback } from "@/lib/payments/mpesa-resilience";
 import {
   createTransaction,
@@ -27,15 +28,23 @@ describe("Domain A payments", () => {
     expect(toMsisdn("254112345678")).toBe("254112345678");
   });
 
-  it("quotes catalog amounts and ignores client-chosen prices", () => {
+  it("quotes catalog amounts and rejects a mismatched client total", () => {
     const quoted = quoteFromRequest({
       sku: "math-notes",
-      amount: 1,
       metadata: { item: "math-notes" },
     });
     expect(quoted.amount).toBe(50);
     expect(quoted.currency).toBe("KES");
+    expect(quoted.totalAmount).toBe(50);
     expect(() => quoteFromRequest({ amount: 9999 })).toThrow(/Unknown price item/);
+    expect(() => quoteFromRequest({ sku: "visual-notes", totalAmount: 1 })).toThrow(/totalAmount/);
+  });
+
+  it("aggregates a cart from catalog unit prices only", () => {
+    const cart = quoteFromRequest({ items: ["visual-notes", "exams", "audiobooks"], totalAmount: 300 });
+    expect(cart.totalAmount).toBe(300);
+    expect(cart.lines.map((line) => line.sku)).toEqual(["visual-notes", "exams", "audiobooks"]);
+    expect(() => quoteFromRequest({ items: ["visual-notes", "exams"], totalAmount: 50 })).toThrow(/totalAmount/);
   });
 
   it("rejects junk initiate payloads via Zod", () => {
@@ -43,8 +52,9 @@ describe("Domain A payments", () => {
     expect(initiateSchema.safeParse({ method: "CASH" }).success).toBe(false);
     expect(initiateSchema.safeParse({ amount: -5 }).success).toBe(false);
     expect(initiateSchema.safeParse({ email: "not-an-email" }).success).toBe(false);
-    const quoted = quoteOrThrow({ sku: "exams", amount: 1, user_id: "attacker" });
+    const quoted = quoteOrThrow({ sku: "exams", user_id: "attacker" });
     expect(quoted.amount).toBe(100);
+    expect(quoted.totalAmount).toBe(100);
   });
 
   it("persists transactions across cache reset and locks terminal status", () => {
@@ -129,5 +139,38 @@ describe("Domain A payments", () => {
     const raw = readFileSync(join(process.env.DATA_DIR as string, "transactions.json"), "utf8");
     expect(raw).toContain(tx.reference_id);
     expect(raw).toContain("SUCCESS");
+  });
+
+  it("releases each cart line only after a successful ledger write", () => {
+    const tx = createTransaction({
+      user_id: "u-cart",
+      provider: "MPESA",
+      amount: 150,
+      currency: "KES",
+      metadata: { items: ["visual-notes", "exams"] },
+    });
+    applySuccess(tx);
+    expect(hasEntitlement("u-cart", "visual-notes")).toBe(true);
+    expect(hasEntitlement("u-cart", "exams")).toBe(true);
+    expect(hasKindAccess("u-cart", "notes")).toBe(true);
+    expect(hasKindAccess("u-cart", "videos")).toBe(false);
+  });
+
+  it("allows five free Ask AI questions then requires the day pass", () => {
+    for (let i = 0; i < 5; i += 1) {
+      expect(canAskAi("u-ai").allowed).toBe(true);
+      recordAiQuery("u-ai", "question " + i);
+    }
+    expect(canAskAi("u-ai").allowed).toBe(false);
+    const pass = createTransaction({
+      user_id: "u-ai",
+      provider: "MPESA",
+      amount: 100,
+      currency: "KES",
+      metadata: { items: ["ask-ai-daily"] },
+    });
+    applySuccess(pass);
+    expect(canAskAi("u-ai").reason).toBe("day_pass");
+    expect(canAskAi("u-ai").allowed).toBe(true);
   });
 });

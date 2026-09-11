@@ -17,6 +17,14 @@ import {
 } from "./lib/google-session.mjs";
 import { parsePath } from "../src/assets/js/data/catalog.js";
 import { renderHtml } from "./lib/prerender.mjs";
+import {
+  applyStkCallback,
+  handleAskAi,
+  handleContent,
+  handleEntitlements,
+  handleInitiate,
+  handleStatus,
+} from "./lib/commerce-http.mjs";
 
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const pub = join(root, "src");
@@ -237,6 +245,7 @@ async function handleStkCallback(req, res) {
     }) + "\n",
     () => {}
   );
+  applyStkCallback(callback);
   sendJson(res, 200, { ResultCode: 0, ResultDesc: "Accepted" });
 }
 
@@ -503,6 +512,64 @@ const server = createServer((req, res) => {
   }
   if (req.method === "POST" && path === "/api/privacy/delete") {
     handlePrivacyDelete(req, res).catch(() => send(res, 400, "invalid json"));
+    return;
+  }
+  if (req.method === "POST" && path === "/api/payments/initiate") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    readBody(req)
+      .then((raw) => handleInitiate({ id: current.user.id, email: current.user.email }, JSON.parse(raw || "{}")))
+      .then((out) => sendJson(res, out.status || 200, out))
+      .catch((err) => sendJson(res, 502, { error: err instanceof Error ? err.message : "Unable to start payment" }));
+    return;
+  }
+  if (req.method === "GET" && path.startsWith("/api/payments/status/")) {
+    const current = requireUser(req, res);
+    if (!current) return;
+    const referenceId = decodeURIComponent(path.slice("/api/payments/status/".length));
+    const out = handleStatus({ id: current.user.id }, referenceId);
+    sendJson(res, out.status || 200, out);
+    return;
+  }
+  if (req.method === "POST" && path === "/api/ask-ai") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    readBody(req)
+      .then((raw) => {
+        const payload = JSON.parse(raw || "{}");
+        return handleAskAi({ id: current.user.id }, payload.query || payload.q);
+      })
+      .then((out) => sendJson(res, out.status || 200, out))
+      .catch(() => send(res, 400, "invalid json"));
+    return;
+  }
+  if (req.method === "GET" && path === "/api/entitlements/me") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    sendJson(res, 200, handleEntitlements({ id: current.user.id }));
+    return;
+  }
+  if (req.method === "GET" && path.startsWith("/api/content/")) {
+    const current = requireUser(req, res);
+    if (!current) return;
+    const parts = path.split("/").filter(Boolean);
+    const out = handleContent({ id: current.user.id }, parts[2], parts[3]);
+    if (out.status) {
+      sendJson(res, out.status, out);
+      return;
+    }
+    if (out.bytes) {
+      const types = { ".pdf": "application/pdf", ".mp3": "audio/mpeg", ".mp4": "video/mp4" };
+      res.writeHead(200, {
+        "Content-Type": types[out.type] || "application/octet-stream",
+        "Cache-Control": "no-store, private",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": "inline; filename=\"view\"",
+      });
+      res.end(out.bytes);
+      return;
+    }
+    sendJson(res, 200, out);
     return;
   }
   if (req.method === "GET" || req.method === "HEAD") {

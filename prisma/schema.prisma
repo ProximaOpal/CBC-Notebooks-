@@ -120,11 +120,20 @@ model Transaction {
 }
 
 model Entitlement {
-  id         String   @id @default(cuid())
-  userId     String
-  item       String
-  releasedAt DateTime @default(now())
+  id             String    @id @default(cuid())
+  userId         String
+  item           String
+  sku            String?
+  expiresAt      DateTime?
+  transactionId  String?
+  releasedAt     DateTime  @default(now())
 
   @@unique([userId, item])
   @@index([userId])
+}
+
+model UserAiQuery {
+  userId    String   @id
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
 }

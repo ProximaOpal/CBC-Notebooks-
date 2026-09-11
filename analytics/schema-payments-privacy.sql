@@ -40,3 +40,13 @@ CREATE TABLE IF NOT EXISTS privacy_requests (
 
 CREATE INDEX IF NOT EXISTS privacy_requests_subject_idx ON privacy_requests (subject_hash, created_at DESC);
 CREATE INDEX IF NOT EXISTS mpesa_intents_status_idx ON mpesa_intents (status, query_after);
+
+CREATE TABLE IF NOT EXISTS user_ai_queries (
+  user_id    TEXT PRIMARY KEY,
+  count      INTEGER NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE entitlements ADD COLUMN IF NOT EXISTS sku TEXT;
+ALTER TABLE entitlements ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ;
+ALTER TABLE entitlements ADD COLUMN IF NOT EXISTS transaction_id TEXT;

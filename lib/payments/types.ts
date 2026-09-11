@@ -1,9 +1,20 @@
 export type PaymentProvider = "MPESA" | "STRIPE";
 export type PaymentStatus = "PENDING" | "SUCCESS" | "FAILED" | "TIMED_OUT";
-export type ResourceType = "Exam" | "Notes" | "3D Pass" | "Subscription" | "AudioBooks" | "Immersive";
+export type ResourceType =
+  | "Exam"
+  | "Notes"
+  | "3D Pass"
+  | "Subscription"
+  | "AudioBooks"
+  | "Immersive"
+  | "Videos"
+  | "Gallery"
+  | "Experiments"
+  | "AskAI";
 
 export type PaymentMetadata = {
   item?: string;
+  items?: string[];
   grade_level?: string;
   subject_name?: string;
   resource_type?: ResourceType | string;

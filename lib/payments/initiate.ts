@@ -11,25 +11,33 @@ export async function startPayment(
   input: InitiateBody,
   user: { id: string; email?: string | null }
 ) {
-  const sku = quoteOrThrow(input);
+  let sku;
+  try {
+    sku = quoteOrThrow(input);
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Invalid cart", status: 400 as const };
+  }
   const method = resolveMethod({
     ...input,
-    amount: sku.amount,
+    amount: sku.totalAmount,
     currency: sku.currency,
   } as InitiatePaymentInput);
+  const lineSkus = sku.lines.map((line) => line.sku);
   const tx = createTransaction({
     user_id: user.id,
     provider: method,
-    amount: sku.amount,
+    amount: sku.totalAmount,
     currency: sku.currency,
     metadata: {
       ...(input.metadata as Record<string, unknown> | undefined),
       sku: sku.sku,
-      item: sku.sku,
+      item: lineSkus[0],
+      items: lineSkus,
       resource_type: sku.resource_type,
       country: input.country || "KE",
       email: input.email || user.email || undefined,
       phone: input.phone,
+      catalog_total: sku.totalAmount,
     },
   });
 
@@ -40,7 +48,7 @@ export async function startPayment(
         return { error: "M-Pesa requires a Kenyan phone number", status: 400 as const };
       }
       const msisdn = toMsisdn(input.phone);
-      const stk = await initiateStkPush(msisdn, sku.amount, tx.reference_id, input.description || sku.description);
+      const stk = await initiateStkPush(msisdn, sku.totalAmount, tx.reference_id, input.description || sku.description);
       const next = updateTransaction(tx.id, { provider_reference: stk.CheckoutRequestID });
       return {
         ok: true as const,
@@ -52,7 +60,7 @@ export async function startPayment(
     }
 
     const session = await createStripeSession(
-      sku.amount,
+      sku.totalAmount,
       sku.currency,
       tx.reference_id,
       input.email || user.email || undefined,

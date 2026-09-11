@@ -4,6 +4,8 @@ import { initAskBar, initScrollTrack, initMobileNav } from "./nav.js";
 import { initPwa } from "./pwa.js";
 import { initOverlays } from "./overlays.js";
 import { initAuthOverlay } from "./auth-overlay.js";
+import { initPayOverlay } from "./pay-overlay.js";
+import { initDrmViewer } from "./drm.js";
 import { initFrictionTracking, track } from "./lib/telemetry.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initPwa();
   initOverlays();
   initAuthOverlay();
+  initPayOverlay();
+  initDrmViewer();
   initFrictionTracking();
   track("session_started");
 });

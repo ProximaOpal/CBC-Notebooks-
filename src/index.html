@@ -27,6 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/pay-overlay.css" />
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="application/ld+json">
 {
@@ -163,15 +164,6 @@
         galleries, experiments and exams for Upper Primary (KPSEA), Junior Secondary (KJSEA)
         and Senior School Grade 10 (KSSEA), aligned to KICD.
       </p>
-      <nav class="hero__grades" aria-label="CBC grades">
-        <a href="/grade-4/">Grade 4</a>
-        <a href="/grade-5/">Grade 5</a>
-        <a href="/grade-6/">Grade 6</a>
-        <a href="/grade-7/">Grade 7</a>
-        <a href="/grade-8/">Grade 8</a>
-        <a href="/grade-9/">Grade 9</a>
-        <a href="/grade-10/">Grade 10</a>
-      </nav>
     </div>
 
     <aside class="hero__resources" id="resourceBtns" aria-label="Resources">
@@ -205,6 +197,12 @@
               <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
             </span>
           </button>
+          <button class="foot-btn" type="button" data-pay-open>
+            <span>Pay with M-Pesa</span>
+            <span class="foot-btn__ico" style="--ico:#2EE59B" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><circle cx="16.5" cy="14" r="1.2"/></svg>
+            </span>
+          </button>
           <button class="foot-btn" id="install" type="button" data-install>
             <span>Install App</span>
             <span class="install-btn__stores" aria-hidden="true">
@@ -236,7 +234,7 @@
   </div>
 </header>
 
-<main id="seoDocument" class="seo">
+<main id="seoDocument" class="seo" aria-hidden="true">
   <nav class="seo__crumbs" aria-label="Breadcrumb"><a href="/">Home</a></nav>
   <h2>Kenya CBC notes, exams and labs for Grades 4–10</h2>
   <p>CBC Notebooks is a KICD-aligned library for Kenya Grades 4–10. Learners, parents and teachers can open notes, KPSEA and KJSEA exams, marking schemes, video lessons and virtual laboratories without waiting for JavaScript.</p>
@@ -564,6 +562,102 @@
         <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
       </nav>
     </div>
+  </article>
+</div>
+
+<div class="pay-overlay" id="payOverlay" hidden>
+  <div class="pay-overlay__dim" data-pay-dim></div>
+  <div class="pay-overlay__board" role="dialog" aria-modal="true" aria-labelledby="payListTitle">
+    <button class="pay-overlay__close" type="button" data-pay-close aria-label="Close payments"></button>
+
+    <section class="pay-phone pay-phone--list" id="payScreenList">
+      <header class="pay-phone__bar">
+        <button class="pay-phone__back" type="button" data-pay-close aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <h2 id="payListTitle">My Payments</h2>
+        <button class="pay-phone__bell" type="button" data-pay-tab="history" aria-label="Payment history">
+          <svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5"/><path d="M10 17v1a2 2 0 0 0 4 0v-1"/></svg>
+          <span class="pay-bell-dot" id="payBellDot"></span>
+        </button>
+      </header>
+      <div class="pay-tabs">
+        <button class="pay-tab is-on" type="button" data-pay-tab="services">Services</button>
+        <button class="pay-tab" type="button" data-pay-tab="history">History</button>
+      </div>
+      <div class="pay-tickets" id="payTicketList"></div>
+    </section>
+
+    <section class="pay-phone pay-phone--details" id="payScreenDetails">
+      <header class="pay-phone__bar">
+        <button class="pay-phone__back" type="button" id="payBackDetails" aria-label="Back to list">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <h2>Payment Details</h2>
+        <button class="pay-phone__bell" type="button" aria-label="Alerts">
+          <svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5"/><path d="M10 17v1a2 2 0 0 0 4 0v-1"/></svg>
+          <span class="pay-bell-dot"></span>
+        </button>
+      </header>
+
+      <div class="pay-pass">
+        <div class="pay-pass__card">
+          <p class="pay-pass__kicker" id="payDetailService"></p>
+          <p class="pay-pass__name" id="payDetailName">Learner</p>
+          <p class="pay-pass__id">Booking ID <strong id="payDetailRef">CBC0000</strong></p>
+        </div>
+        <div class="pay-pass__qr" id="payDetailQr" aria-hidden="true"></div>
+      </div>
+
+      <div class="pay-facts">
+        <div class="pay-facts__item">
+          <em>Date</em>
+          <strong id="payDetailDate">—</strong>
+        </div>
+        <div class="pay-facts__item">
+          <em>Time</em>
+          <strong id="payDetailTime">—</strong>
+        </div>
+        <div class="pay-facts__item pay-facts__item--full">
+          <em>Amount</em>
+          <strong id="payDetailAmount">KES 0</strong>
+          <ul class="pay-cart" id="payCartLines"></ul>
+        </div>
+        <div class="pay-facts__item">
+          <em>Country</em>
+          <strong id="payDetailGrade">Kenya</strong>
+        </div>
+        <div class="pay-facts__item">
+          <em>City</em>
+          <strong id="payDetailSubject">Nairobi</strong>
+        </div>
+        <div class="pay-facts__item pay-facts__item--full">
+          <em>M-Pesa number</em>
+          <input class="pay-phone-input" id="payPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="2547XXXXXXXX" />
+        </div>
+      </div>
+
+      <p class="pay-error" id="payError" role="alert" hidden></p>
+      <p class="pay-wait" id="payWait" hidden>Enter PIN on your phone · <span id="paySeconds">60</span>s</p>
+      <p class="pay-paid" id="payPaid" hidden></p>
+
+      <div class="pay-actions" id="payActions">
+        <button class="pay-chip" type="button" id="paySendStk">Send STK</button>
+        <button class="pay-chip" type="button" id="payChange">Change</button>
+        <button class="pay-chip" type="button" id="payShare">Share QR</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="drm-viewer" id="drmViewer" hidden>
+  <div class="drm-viewer__dim" data-drm-close></div>
+  <article class="drm-viewer__sheet" role="dialog" aria-modal="true" aria-labelledby="drmTitle">
+    <button class="drm-viewer__close" type="button" data-drm-close aria-label="Close viewer"></button>
+    <p class="drm-viewer__kicker">View only</p>
+    <h2 id="drmTitle">Resource</h2>
+    <p class="drm-viewer__note">This copy cannot be downloaded, printed or saved. Right-click and print shortcuts are locked in this viewer.</p>
+    <div class="drm-viewer__stage" id="drmStage"></div>
   </article>
 </div>
 

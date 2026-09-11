@@ -4,6 +4,10 @@ import { SUBJECTS, matchesSubject } from "./data/subjects.js";
 import { parsePath } from "./data/catalog.js";
 import { subjectUrl } from "./lib/routes.js";
 import { slideToPhoto, pauseAutoplay, restartAutoplay } from "./hero.js";
+import { openPayOverlay } from "./pay-overlay.js";
+import { skuForResource } from "./data/payments.js";
+import { openAuthOverlay } from "./auth-overlay.js";
+import { openDrmViewer } from "./drm.js";
 import {
   trackResourceOpened,
   trackDownload,
@@ -298,6 +302,42 @@ function selectedNames() {
   return activeSubject.topics.filter((t) => selected.has(t.id)).map((t) => t.name);
 }
 
+async function openProtectedResource(gradeLevel) {
+  const kind = resource === "experiments" ? "experiments" : resource;
+  const id = activeSubject.id;
+  try {
+    const res = await fetch(`/api/content/${encodeURIComponent(kind)}/${encodeURIComponent(id)}`, {
+      credentials: "include",
+    });
+    if (res.status === 401) {
+      openAuthOverlay("signin");
+      statusMessage("Sign in to open this resource");
+      return;
+    }
+    if (res.status === 402) {
+      openPayOverlay({
+        sku: skuForResource(resource).sku,
+        subject: activeSubject.name,
+        grade: gradeLevel,
+        resource,
+      });
+      return;
+    }
+    if (!res.ok) {
+      statusMessage("Unable to open this resource");
+      return;
+    }
+    const type = res.headers.get("content-type") || "";
+    if (type.includes("application/json")) {
+      openDrmViewer({ title: activeSubject.name, payload: await res.json() });
+      return;
+    }
+    openDrmViewer({ title: activeSubject.name, blob: await res.blob() });
+  } catch {
+    statusMessage("Unable to reach the content service");
+  }
+}
+
 function updateActions() {
   const ready = activeSubject ? selectedCount() > 0 : true;
   ["actPreview", "actDownload", "actShare"].forEach((id) => {
@@ -320,9 +360,6 @@ function syncListNav() {
 
 function hydrateFromLocation() {
   const route = parsePath(location.pathname);
-  if (route.type && route.type !== "home" && route.type !== "unknown") {
-    document.body.classList.add("is-seo-page");
-  }
   if (route.resource && RESOURCE_LABEL[route.resource]) {
     resource = route.resource;
   } else if (route.type === "lab") {
@@ -332,6 +369,7 @@ function hydrateFromLocation() {
     activeSubject = route.subject;
     listCursor = 0;
   }
+  return route;
 }
 
 export function initPanel() {
@@ -409,19 +447,25 @@ export function initPanel() {
       return;
     }
     statusMessage(verb + ": " + names.join(", "));
-    if (verb === "Download") {
-      trackDownload({
-        subject_name: activeSubject.name,
-        grade_level: activeSubject.level === "up" ? "Upper Primary" : activeSubject.level === "ss" ? "Senior School" : "Junior Secondary",
-        document_type: resource,
-        filename: names.join(", "),
-      });
-    } else if (verb === "Preview") {
-      track("resource_preview_clicked", {
-        subject_name: activeSubject.name,
-        file_type: resource,
-      });
-    } else if (verb === "Share") {
+    const gradeLevel = activeSubject.level === "up" ? "Upper Primary" : activeSubject.level === "ss" ? "Senior School" : "Junior Secondary";
+    if (verb === "Download" || verb === "Preview") {
+      if (verb === "Download") {
+        trackDownload({
+          subject_name: activeSubject.name,
+          grade_level: gradeLevel,
+          document_type: resource,
+          filename: names.join(", "),
+        });
+      } else {
+        track("resource_preview_clicked", {
+          subject_name: activeSubject.name,
+          file_type: resource,
+        });
+      }
+      void openProtectedResource(gradeLevel);
+      return;
+    }
+    if (verb === "Share") {
       track("resource_share_clicked", {
         subject_name: activeSubject.name,
         file_type: resource,
@@ -435,7 +479,10 @@ export function initPanel() {
   if (download) download.addEventListener("click", () => act("Download"));
   if (share) share.addEventListener("click", () => act("Share"));
 
-  hydrateFromLocation();
+  const route = hydrateFromLocation();
   const kind = new URLSearchParams(location.search).get("resource");
   if (kind && RESOURCE_LABEL[kind]) openPanel(kind);
+  else if (route?.type && route.type !== "home" && route.type !== "unknown") {
+    openPanel(resource);
+  }
 }

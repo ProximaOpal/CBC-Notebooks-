@@ -11,6 +11,12 @@ import {
 
 const SESSION_KEY = "cbc-auth-session";
 
+let authOpen = () => {};
+
+export function openAuthOverlay(view = "signin") {
+  authOpen(view);
+}
+
 /** @typedef {{ id: string, name: string, email: string, startedAt: string }} AuthSession */
 
 function $(id) {
@@ -352,5 +358,6 @@ export function initAuthOverlay() {
     if (note) note.hidden = Boolean(status.configured);
   });
 
+  authOpen = openOverlay;
   paintHeader();
 }

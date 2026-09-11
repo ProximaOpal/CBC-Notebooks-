@@ -104,6 +104,8 @@ export function PaymentModal({
         body: JSON.stringify({
           method: "MPESA",
           sku: sku || String(metadata?.item || metadata?.sku || ""),
+          items: sku ? [sku] : undefined,
+          totalAmount: amount,
           currency,
           country,
           phone,
@@ -132,6 +134,8 @@ export function PaymentModal({
         body: JSON.stringify({
           method: "STRIPE",
           sku: sku || String(metadata?.item || metadata?.sku || ""),
+          items: sku ? [sku] : undefined,
+          totalAmount: amount,
           currency,
           country,
           email,

@@ -46,5 +46,8 @@ describe("prerendered HTML", () => {
     expect(html).toContain('name="twitter:card"');
     expect(html).toContain('href="/notes/grade-7/science/"');
     expect(html).not.toContain('<div id="root"></div>');
+    expect(html).not.toContain("is-seo-page");
+    expect(html).toContain('id="seoDocument"');
+    expect(html).toContain('class="hero"');
   });
 });

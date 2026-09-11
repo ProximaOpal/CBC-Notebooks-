@@ -1,9 +1,10 @@
-const CACHE = "cbc-notebooks-v11";
+const CACHE = "cbc-notebooks-v14";
 const PRECACHE = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
   "/assets/css/styles.css",
+  "/assets/css/pay-overlay.css",
   "/assets/js/main.js",
   "/assets/js/config.js",
   "/assets/js/hero.js",
@@ -12,6 +13,8 @@ const PRECACHE = [
   "/assets/js/pwa.js",
   "/assets/js/overlays.js",
   "/assets/js/auth-overlay.js",
+  "/assets/js/pay-overlay.js",
+  "/assets/js/drm.js",
   "/assets/js/google-gis.js",
   "/assets/js/lib/dom.js",
   "/assets/js/lib/telemetry.js",
@@ -21,6 +24,7 @@ const PRECACHE = [
   "/assets/js/data/senior.js",
   "/assets/js/data/labs.js",
   "/assets/js/data/catalog.js",
+  "/assets/js/data/payments.js",
   "/assets/img/icons/icon-192.png",
   "/assets/img/icons/icon-512.png",
   "/assets/img/icons/apple-touch-icon.png",

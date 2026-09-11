@@ -1,0 +1,501 @@
+/* Booking-ticket payment overlay — cloned from the two-phone mock (no status bars). */
+.pay-overlay{
+  --pay-ink:#1a4d43;
+  --pay-mint:#2ee59b;
+  --pay-teal:#2ad3c7;
+  --pay-teal-stub:#24c3b8;
+  --pay-blue:#4b7cff;
+  --pay-blue-stub:#3f70f4;
+  --pay-navy:#3a6ae8;
+  --pay-navy-stub:#325fde;
+  --pay-label:#b7bfc9;
+  --pay-text:#2c3340;
+  --pay-muted:#c5ccd6;
+  --pay-studio:#e6ebf2;
+  position:fixed;
+  inset:0;
+  z-index:72;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3vh 3vw;
+  font-family:"DM Sans", "Inter", "Helvetica Neue", sans-serif;
+  color:var(--pay-ink);
+}
+.pay-overlay[hidden]{ display:none !important; }
+.pay-overlay__dim{
+  position:absolute;
+  inset:0;
+  background:rgba(18, 28, 40, 0.38);
+}
+.pay-overlay__board{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap:36px;
+  padding:28px 48px 28px 32px;
+  background:var(--pay-studio);
+  border-radius:36px;
+  box-shadow:0 28px 80px rgba(30, 45, 70, 0.22);
+}
+.pay-overlay__close{
+  position:absolute;
+  top:16px;
+  right:18px;
+  width:28px;
+  height:22px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+  z-index:4;
+}
+.pay-overlay__close::before,
+.pay-overlay__close::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:10px;
+  width:100%;
+  height:2px;
+  background:#1a4d43;
+}
+.pay-overlay__close::before{ transform:rotate(45deg); }
+.pay-overlay__close::after{ transform:rotate(-45deg); }
+
+.pay-phone{
+  width:340px;
+  height:min(720px, 86vh);
+  background:#fff;
+  border-radius:42px;
+  box-shadow:
+    0 18px 50px rgba(50, 70, 110, 0.12),
+    0 2px 8px rgba(50, 70, 110, 0.06);
+  display:flex;
+  flex-direction:column;
+  padding:18px 0 16px;
+  position:relative;
+  overflow:hidden;
+}
+.pay-phone--list{ overflow:visible; }
+.pay-phone--details{ overflow:visible; }
+
+.pay-phone__bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 22px 4px;
+  min-height:44px;
+}
+.pay-phone__back,
+.pay-phone__bell{
+  width:36px;
+  height:36px;
+  border:none;
+  background:none;
+  padding:0;
+  cursor:pointer;
+  color:var(--pay-ink);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.pay-phone__back svg,
+.pay-phone__bell svg{
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.pay-phone__bar h2{
+  margin:0;
+  font-size:1.28rem;
+  font-weight:700;
+  letter-spacing:-0.03em;
+  color:var(--pay-ink);
+}
+.pay-bell-dot{
+  position:absolute;
+  top:6px;
+  right:7px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--pay-mint);
+  box-shadow:0 0 0 2px #fff;
+}
+.pay-bell-dot[hidden]{ display:none; }
+
+.pay-tabs{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:10px 22px 8px;
+}
+.pay-tab{
+  height:36px;
+  padding:0 22px;
+  border:none;
+  border-radius:999px;
+  background:transparent;
+  color:var(--pay-muted);
+  font-family:inherit;
+  font-size:0.92rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.pay-tab.is-on{
+  background:var(--pay-mint);
+  color:#fff;
+  box-shadow:0 8px 16px rgba(46, 229, 155, 0.38);
+}
+
+.pay-tickets{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding:14px 18px 22px 22px;
+  overflow:auto;
+  overflow-x:visible;
+  flex:1;
+}
+.pay-empty{
+  margin:28px 8px;
+  color:#8b95a3;
+  font-size:0.92rem;
+  line-height:1.45;
+  text-align:center;
+}
+
+.pay-ticket{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 86px;
+  min-height:108px;
+  border:none;
+  padding:0;
+  border-radius:20px;
+  color:#fff;
+  text-align:left;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 10px 24px rgba(40, 90, 160, 0.12);
+  transition:transform .18s ease, box-shadow .18s ease, margin .18s ease;
+}
+.pay-ticket--teal{ background:var(--pay-teal); }
+.pay-ticket--teal .pay-ticket__stub{ background:var(--pay-teal-stub); }
+.pay-ticket--blue{ background:var(--pay-blue); }
+.pay-ticket--blue .pay-ticket__stub{ background:var(--pay-blue-stub); }
+.pay-ticket--navy{ background:var(--pay-navy); }
+.pay-ticket--navy .pay-ticket__stub{ background:var(--pay-navy-stub); }
+.pay-ticket.is-featured{
+  z-index:3;
+  margin-left:-26px;
+  width:calc(100% + 18px);
+  min-height:118px;
+  box-shadow:0 22px 40px rgba(55, 90, 200, 0.28);
+}
+
+.pay-ticket__notch{
+  position:absolute;
+  top:50%;
+  left:calc(100% - 86px);
+  width:22px;
+  height:22px;
+  margin-top:-11px;
+  margin-left:-11px;
+  border-radius:50%;
+  background:#fff;
+  z-index:2;
+  box-shadow:0 0 0 0 #fff;
+  pointer-events:none;
+}
+.pay-ticket.is-featured .pay-ticket__notch{
+  background:#fff;
+}
+
+.pay-ticket__main{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+  padding:14px 18px 14px 16px;
+  min-width:0;
+}
+.pay-ticket__route{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:0.8rem;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pay-flag{
+  width:16px;
+  height:11px;
+  border-radius:2px;
+  flex-shrink:0;
+  overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.35);
+  display:block;
+}
+.pay-ticket__block{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  min-width:0;
+}
+.pay-ticket__block em{
+  font-style:normal;
+  font-size:0.62rem;
+  font-weight:500;
+  opacity:0.78;
+}
+.pay-ticket__block strong{
+  font-size:0.98rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+}
+.pay-ticket.is-featured .pay-ticket__block strong{
+  font-size:1.12rem;
+}
+.pay-ticket__ids{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:4px;
+}
+.pay-ticket__ids strong{
+  font-size:0.86rem;
+  letter-spacing:0.02em;
+}
+
+.pay-ticket__stub{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  border-radius:0 20px 20px 0;
+  padding:10px 4px;
+}
+.pay-ticket__mon,
+.pay-ticket__yr{
+  font-size:0.62rem;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  opacity:0.92;
+}
+.pay-ticket__day{
+  font-size:1.7rem;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-0.04em;
+}
+.pay-ticket.is-featured .pay-ticket__day{ font-size:1.9rem; }
+
+.pay-pass{
+  position:relative;
+  margin:8px 18px 8px;
+  min-height:156px;
+}
+.pay-pass__card{
+  background:linear-gradient(160deg, #5b8cff 0%, #4b7cff 100%);
+  border-radius:22px;
+  min-height:148px;
+  padding:18px 128px 18px 20px;
+  color:#fff;
+  box-shadow:0 10px 24px rgba(75, 124, 255, 0.22);
+}
+.pay-pass__kicker{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 0 10px;
+  font-size:0.78rem;
+  font-weight:500;
+  opacity:0.95;
+}
+.pay-pass__kicker .pay-flag{ width:16px; height:11px; }
+.pay-pass__name{
+  margin:0 0 12px;
+  font-size:1.55rem;
+  font-weight:700;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+}
+.pay-pass__id{
+  margin:0;
+  font-size:0.72rem;
+  opacity:0.85;
+}
+.pay-pass__id strong{
+  display:block;
+  margin-top:3px;
+  font-size:0.92rem;
+  font-weight:700;
+  letter-spacing:0.04em;
+  opacity:1;
+}
+.pay-pass__qr{
+  position:absolute;
+  right:-8px;
+  top:18px;
+  width:120px;
+  height:120px;
+  background:#fff;
+  border-radius:18px;
+  padding:12px;
+  box-shadow:0 14px 32px rgba(40, 70, 140, 0.18);
+}
+.pay-pass__qr svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.pay-facts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px 28px;
+  padding:14px 24px 8px;
+}
+.pay-facts__item{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.pay-facts__item--full{ grid-column:1 / -1; }
+.pay-facts em{
+  font-style:normal;
+  font-size:0.82rem;
+  color:var(--pay-label);
+  font-weight:500;
+}
+.pay-facts strong{
+  color:var(--pay-text);
+  font-size:0.95rem;
+  font-weight:700;
+  letter-spacing:-0.01em;
+}
+.pay-phone-input{
+  width:100%;
+  border:none;
+  border-bottom:1px solid transparent;
+  background:transparent;
+  padding:0 0 2px;
+  font:inherit;
+  font-size:0.95rem;
+  font-weight:700;
+  color:var(--pay-text);
+  outline:none;
+}
+.pay-phone-input:focus{ border-bottom-color:var(--pay-blue); }
+.pay-phone-input::placeholder{
+  color:#c5ccd6;
+  font-weight:500;
+}
+.pay-phone-input:disabled{ opacity:0.7; }
+
+.pay-error{
+  margin:4px 24px 0;
+  color:#d64545;
+  font-size:0.8rem;
+  font-weight:600;
+}
+.pay-error[hidden]{ display:none; }
+
+.pay-wait,
+.pay-paid{
+  margin:auto 18px 10px;
+  text-align:center;
+  font-size:0.88rem;
+  font-weight:700;
+  color:var(--pay-ink);
+}
+.pay-wait[hidden],
+.pay-paid[hidden]{ display:none; }
+.pay-wait{
+  padding:14px 12px;
+  border-radius:999px;
+  background:#f3fbf7;
+  color:#1a4d43;
+}
+
+.pay-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  padding:10px 16px 18px;
+  margin-top:auto;
+}
+.pay-actions[hidden]{ display:none; }
+.pay-chip{
+  height:42px;
+  border-radius:999px;
+  border:1.6px solid var(--pay-blue);
+  background:#fff;
+  color:var(--pay-blue);
+  font-family:inherit;
+  font-size:0.72rem;
+  font-weight:650;
+  letter-spacing:-0.01em;
+  cursor:pointer;
+  padding:0 6px;
+  white-space:nowrap;
+}
+.pay-ticket.is-in-cart:not(.is-featured){
+  outline:2px solid rgba(255,255,255,0.7);
+  outline-offset:-2px;
+}
+.pay-cart{
+  list-style:none;
+  margin:8px 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.pay-cart li{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:0.82rem;
+  color:var(--pay-text);
+}
+.pay-cart strong{ font-size:0.82rem; }
+
+@media (max-width:860px){
+  .pay-overlay{ padding:0; align-items:stretch; }
+  .pay-overlay__board{
+    flex:1;
+    gap:0;
+    padding:12px 12px 18px;
+    border-radius:0;
+    overflow:auto;
+    align-items:center;
+  }
+  .pay-phone{ width:min(360px, 100%); height:min(740px, 92vh); }
+  .pay-phone--details{ display:none; }
+  .pay-overlay.is-details .pay-phone--list{ display:none; }
+  .pay-overlay.is-details .pay-phone--details{ display:flex; }
+  .pay-ticket.is-featured{
+    margin-left:-14px;
+    width:calc(100% + 8px);
+  }
+}
+
+@media (min-width:861px){
+  .pay-overlay.is-details .pay-phone--details{ display:flex; }
+}

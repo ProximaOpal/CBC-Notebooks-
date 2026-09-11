@@ -301,24 +301,6 @@ function replaceHead(html, model) {
   return next;
 }
 
-function setHero(html, model) {
-  const eyebrow =
-    model.type === "home"
-      ? "Grade 4 — Grade 10 · CBC Curriculum · KPSEA · KJSEA · KSSEA"
-      : model.h2;
-  const copy = model.type === "home"
-    ? null
-    : model.description;
-  let next = html.replace(
-    /<p class="hero__eyebrow">[\s\S]*?<\/p>/,
-    `<p class="hero__eyebrow">${esc(eyebrow)}</p>`
-  );
-  if (copy) {
-    next = next.replace(/<p class="hero__copy">[\s\S]*?<\/p>/, `<p class="hero__copy">${esc(copy)}</p>`);
-  }
-  return next;
-}
-
 function setResourceLinks(html) {
   const buttons = RESOURCE_HUBS.map((h) => {
     const cls = h.outline ? "res-btn res-btn--outline" : "res-btn res-btn--solid";
@@ -331,7 +313,7 @@ function setResourceLinks(html) {
 }
 
 function injectDocument(html, model) {
-  const block = `<main id="seoDocument" class="seo">${documentHtml(model)}</main>`;
+  const block = `<main id="seoDocument" class="seo" aria-hidden="true">${documentHtml(model)}</main>`;
   if (html.includes('id="seoDocument"')) {
     return html.replace(/<main id="seoDocument"[\s\S]*?<\/main>/, block);
   }
@@ -339,10 +321,9 @@ function injectDocument(html, model) {
 }
 
 function setBody(html, model) {
-  const cls = model.type === "home" ? "" : " is-seo-page";
   return html
     .replace(/<html lang="en(?:-KE)?">/, `<html lang="en-KE">`)
-    .replace(/<body[^>]*>/, `<body class="${cls.trim()}" data-route="${esc(model.path)}" data-route-type="${esc(model.type)}">`)
+    .replace(/<body[^>]*>/, `<body data-route="${esc(model.path)}" data-route-type="${esc(model.type)}">`)
     .replace(/href="#hero"/g, 'href="/"')
     .replace(/src="assets\/js\/main\.js"/, 'src="/assets/js/main.js"');
 }
@@ -350,7 +331,6 @@ function setBody(html, model) {
 export function renderHtml(shell, route) {
   const model = pageModel(route);
   let html = replaceHead(shell, model);
-  html = setHero(html, model);
   html = setResourceLinks(html);
   html = injectDocument(html, model);
   html = setBody(html, model);

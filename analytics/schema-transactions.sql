@@ -20,9 +20,12 @@ CREATE INDEX IF NOT EXISTS transactions_provider_ref_idx ON transactions (provid
 CREATE INDEX IF NOT EXISTS transactions_user_idx ON transactions (user_id, created_at DESC);
 
 CREATE TABLE IF NOT EXISTS entitlements (
-  id           TEXT PRIMARY KEY,
-  user_id      TEXT NOT NULL,
-  item         TEXT NOT NULL,
-  released_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  id              TEXT PRIMARY KEY,
+  user_id         TEXT NOT NULL,
+  item            TEXT NOT NULL,
+  sku             TEXT,
+  expires_at      TIMESTAMPTZ,
+  transaction_id  TEXT,
+  released_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (user_id, item)
 );

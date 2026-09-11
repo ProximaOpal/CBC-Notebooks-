@@ -1,5 +1,7 @@
 import { $ } from "./lib/dom.js";
 import { openPanel } from "./panel.js";
+import { openPayOverlay } from "./pay-overlay.js";
+import { openAuthOverlay } from "./auth-overlay.js";
 import {
   trackSearch,
   debounceSearch,
@@ -37,7 +39,7 @@ function countResults(q) {
   ).length;
 }
 
-function runAsk(query) {
+async function runAsk(query) {
   const q = query.trim();
   const started = performance.now();
   const file_type = inferFileType(q);
@@ -52,6 +54,26 @@ function runAsk(query) {
     latency_ms: Math.round(performance.now() - started),
     query_id,
   });
+  try {
+    const res = await fetch("/api/ask-ai", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: q }),
+    });
+    if (res.status === 401) {
+      openAuthOverlay("signin");
+      return;
+    }
+    if (res.status === 402) {
+      const data = await res.json().catch(() => ({}));
+      openPayOverlay({ sku: data.sku || "ask-ai-daily" });
+      return;
+    }
+    if (!res.ok) return;
+  } catch {
+    return;
+  }
   openPanel(file_type, q);
 }
 
@@ -62,7 +84,7 @@ export function initAskBar() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    runAsk(input.value);
+    void runAsk(input.value);
   });
 
   input.addEventListener("input", () => {

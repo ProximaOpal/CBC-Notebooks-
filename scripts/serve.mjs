@@ -6,12 +6,22 @@ import { createServer } from "node:http";
 import { createReadStream, existsSync, mkdirSync, appendFile, statSync, readFileSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createUserStore, readSignedSessionId } from "./lib/google-session.mjs";
+import {
+  applyStkCallback,
+  handleAskAi,
+  handleContent,
+  handleEntitlements,
+  handleInitiate,
+  handleStatus,
+} from "./lib/commerce-http.mjs";
 
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const dist = join(root, "dist");
 const pub = existsSync(join(dist, "index.html")) ? dist : join(root, "src");
 const dataDir = join(root, ".data");
 const PORT = Number(process.env.PORT || 8080);
+const userStore = createUserStore(dataDir);
 
 function loadEnv() {
   [".env.local", ".env"].forEach((name) => {
@@ -33,6 +43,16 @@ function loadEnv() {
 }
 loadEnv();
 
+function requireUser(req, res) {
+  const sessionId = readSignedSessionId(req.headers.cookie);
+  const current = userStore.readSession(sessionId);
+  if (!current) {
+    sendJson(res, 401, { error: "Authentication required" });
+    return null;
+  }
+  return current;
+}
+
 const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -47,6 +67,9 @@ const MIME = {
   ".webmanifest": "application/manifest+json",
   ".txt": "text/plain; charset=utf-8",
   ".ico": "image/x-icon",
+  ".pdf": "application/pdf",
+  ".mp3": "audio/mpeg",
+  ".mp4": "video/mp4",
 };
 
 function send(res, status, body, type = "text/plain") {
@@ -99,6 +122,11 @@ async function handleStkCallback(req, res) {
     }) + "\n",
     () => {}
   );
+  if (String(callback.ResultCode) === "0") {
+    applyStkCallback(callback);
+  } else {
+    applyStkCallback(callback);
+  }
   sendJson(res, 200, { ResultCode: 0, ResultDesc: "Accepted" });
 }
 
@@ -182,6 +210,65 @@ const server = createServer((req, res) => {
   }
   if (req.method === "POST" && path === "/api/payments/mpesa/c2b-confirmation") {
     handleC2bConfirmation(req, res).catch(() => send(res, 400, "invalid json"));
+    return;
+  }
+  if (req.method === "POST" && path === "/api/payments/initiate") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    readBody(req)
+      .then((raw) => handleInitiate({ id: current.user.id, email: current.user.email }, JSON.parse(raw || "{}")))
+      .then((out) => sendJson(res, out.status || 200, out))
+      .catch((err) => sendJson(res, 502, { error: err instanceof Error ? err.message : "Unable to start payment" }));
+    return;
+  }
+  if (req.method === "GET" && path.startsWith("/api/payments/status/")) {
+    const current = requireUser(req, res);
+    if (!current) return;
+    const referenceId = decodeURIComponent(path.slice("/api/payments/status/".length));
+    const out = handleStatus({ id: current.user.id }, referenceId);
+    sendJson(res, out.status || 200, out);
+    return;
+  }
+  if (req.method === "POST" && path === "/api/ask-ai") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    readBody(req)
+      .then((raw) => {
+        const payload = JSON.parse(raw || "{}");
+        return handleAskAi({ id: current.user.id }, payload.query || payload.q);
+      })
+      .then((out) => sendJson(res, out.status || 200, out))
+      .catch(() => send(res, 400, "invalid json"));
+    return;
+  }
+  if (req.method === "GET" && path === "/api/entitlements/me") {
+    const current = requireUser(req, res);
+    if (!current) return;
+    sendJson(res, 200, handleEntitlements({ id: current.user.id }));
+    return;
+  }
+  if (req.method === "GET" && path.startsWith("/api/content/")) {
+    const current = requireUser(req, res);
+    if (!current) return;
+    const parts = path.split("/").filter(Boolean);
+    const kind = parts[2];
+    const id = parts[3];
+    const out = handleContent({ id: current.user.id }, kind, id);
+    if (out.status) {
+      sendJson(res, out.status, out);
+      return;
+    }
+    if (out.bytes) {
+      res.writeHead(200, {
+        "Content-Type": MIME[out.type] || "application/octet-stream",
+        "Cache-Control": "no-store, private",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": "inline; filename=\"view\"",
+      });
+      res.end(out.bytes);
+      return;
+    }
+    sendJson(res, 200, out);
     return;
   }
   if (req.method === "GET" || req.method === "HEAD") {
